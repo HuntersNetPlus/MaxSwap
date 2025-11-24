@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Max Swap Карта </title>
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #ffffff;
+}
+.screen {
+    display: none;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.active { display: block; }
+
+.button {
+    width: 75vw;
+    margin: 20px auto 0;
+    padding: 15px;
+    font-size: 18px;
+    text-align: center;
+    background: #0088ff;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    display: block;
+}
+
+.option {
+    background: #f2f2f2;
+    padding: 12px;
+    border-radius: 12px;
+    margin-top: 15px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    cursor: pointer;
+}
+.option img {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+}
+.desc {
+    font-size: 13px;
+    margin-top: 4px;
+    color: #444;
+}
+
+#loader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(255,255,255,1);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+}
+    #payment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;   /* центр по горизонтали */
+    text-align: center;    /* центр текста */
+}
+    #payment.active {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+#timer {
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<div id="loader">Загрузка...</div>
+
+<!-- SCREEN 1 -->
+<div id="welcome" class="screen active" style="text-align:center;">
+    <img src="https://github.com/Vdffrfr333434/MSTest/blob/main/MsHeader.png?raw=true" style="width:75vw; max-height:75vh; object-fit:contain; margin-top:20px;">
+    <button class="button" id="welcomeBtn"> ✓ Открыть Max Swap Карту </button>
+</div>
+
+<!-- SCREEN 2 -->
+<div id="choose" class="screen">
+    <h2>Выберите карту для выпуска</h2>
+
+    <div class="option" data-name="Max Swap Online Card" data-price="52.5">
+        <img src="https://github.com/Vdffrfr333434/MSTest/blob/main/Card11.png?raw=true">
+        <div>
+            Max Swap Online Card - 52.5 USDT
+            <div class="desc">Подойдёт для покупок в интернете, подписок, оплаты онлайн-сервисов (Netflix, ChatGPT, Spotify и тд.) </div>
+        </div>
+    </div>
+
+    <div class="option" data-name="Max Swap NFC Card" data-price="52.5">
+        <img src="https://github.com/Vdffrfr333434/MSTest/blob/main/Card22.png?raw=true">
+        <div>
+            Max Swap NFC Card - 52.5 USDT
+            <div class="desc">Подойдёт для привязки к GooglePay/ApplePay и оплаты через NFC-терминалы.</div>
+        </div>
+    </div>
+
+    <div class="option" data-name="Max Swap Ultima" data-price="99">
+        <img src="https://github.com/Vdffrfr333434/MSTest/blob/main/Card33.png?raw=true">
+        <div>
+            Max Swap Ultima - 99 USDT
+            <div class="desc">Комбинация двух предыдущих пунктов. Карта подойдёт для любых целей.</div>
+        </div>
+    </div>
+</div>
+
+<!-- SCREEN 3 -->
+<div id="payment" class="screen">
+    <h2 id="pay_title">Выпуск Max Swap Карты </h2>
+
+    <p>💵 Цена: <b id="price_usdt"></b> USDT</p>
+
+    <label>Выберите валюту:</label><br>
+    <select id="currency">
+        <option value="USDT_TRC20">USDT TRC-20</option>
+        <option value="USDT_ERC20">USDT ERC-20</option>
+        <option value="USDT_SOL">USDT SOL</option>
+        <option value="BTC">BTC</option>
+        <option value="ETH">ETH</option>
+        <option value="USDC">USDC ERC-20</option>
+        <option value="LTC">LTC</option>
+    </select>
+
+    <p>К оплате: <b id="converted_amount">...</b></p>
+
+    <p>Адрес: <b id="wallet_address">...</b></p>
+
+    <p style="margin-top:20px; font-size:14px; color:#444;">Карта будет выпущена автоматические после того как транзакция получит 2 подтверждения сети.</p>
+
+    <!-- QR-код появится здесь -->
+    <div id="qrcode" style="margin-top:20px;"></div>
+
+    <div style="margin-top:10px; font-size:18px; font-weight:bold; text-align:center;"> <br>
+        Статус: ожидает оплаты. Обновление статуса через: <span id="timer">15</span> сек
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const screens = {
+        welcome: document.getElementById('welcome'),
+        choose: document.getElementById('choose'),
+        payment: document.getElementById('payment')
+    };
+    const loader = document.getElementById('loader');
+    let selected = { name: null, price: 0 };
+
+    const wallets = {
+        USDT_TRC20: "TVis1d6QARhWBQ6XZmisD2oSWGnqFM2qzX",
+        USDT_ERC20: "0xaacE295640C15344C6a2DC934a3AACcD4e23cc20",
+        USDT_SOL: "AVQJ4s1Y9BrtEmnH5WrxPT818YibUJsaR4uU6Aiht647",
+        BTC: "bc1qrhqsqsds47hycq0zkpx8fdvwfyu0hey843lz6j",
+        ETH: "0xaacE295640C15344C6a2DC934a3AACcD4e23cc20",
+        LTC: "LS2Pg4V8AhaQ1FRweGUHfkBxtwFAbJ6Dpy",
+        USDC: "0xaacE295640C15344C6a2DC934a3AACcD4e23cc20"
+    };
+
+    function openScreen(id) {
+        Object.values(screens).forEach(s => s.classList.remove('active'));
+        loader.style.display = 'flex';
+        setTimeout(() => {
+            loader.style.display = 'none';
+            screens[id].classList.add('active');
+        }, 900);
+    }
+
+    function selectOption(name, price) {
+        selected = { name, price };
+        document.getElementById('pay_title').innerText = name;
+        document.getElementById('price_usdt').innerText = price;
+        openScreen('payment');
+        setTimeout(updateConversion, 500);
+    }
+
+    async function updateConversion() {
+        const cur = document.getElementById("currency").value;
+
+        // Очистка предыдущего QR-кода
+        document.getElementById('qrcode').innerHTML = "";
+        // Генерация нового QR-кода
+        new QRCode(document.getElementById('qrcode'), {
+            text: wallets[cur],
+            width: 180,
+            height: 180
+        });
+
+        if (cur.includes("USDT")) {
+            document.getElementById('converted_amount').innerText = `${selected.price} USDT`;
+            document.getElementById('wallet_address').innerText = wallets[cur];
+            return;
+        }
+
+        try {
+            const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,litecoin,usd-coin&vs_currencies=usd");
+            const data = await res.json();
+            const priceCryptoUSD = {
+                BTC: data.bitcoin.usd,
+                ETH: data.ethereum.usd,
+                LTC: data.litecoin.usd,
+                USDC: data["usd-coin"].usd
+            };
+            const converted = (selected.price / priceCryptoUSD[cur]).toFixed(6);
+            document.getElementById('converted_amount').innerText = `${converted} ${cur}`;
+            document.getElementById('wallet_address').innerText = wallets[cur];
+        } catch {
+            document.getElementById('converted_amount').innerText = "Ошибка загрузки курса";
+        }
+    }
+
+    document.getElementById('welcomeBtn').addEventListener('click', () => openScreen('choose'));
+
+    document.querySelectorAll('#choose .option').forEach(opt => {
+        opt.addEventListener('click', () => selectOption(opt.dataset.name, parseFloat(opt.dataset.price)));
+    });
+
+    document.getElementById('currency').addEventListener('change', updateConversion);
+
+    let timerValue = 15;
+    setInterval(() => {
+        timerValue--;
+        if (timerValue <= 0) timerValue = 15;
+        document.getElementById('timer').innerText = timerValue;
+    }, 1000);
+});
+</script>
+
+</body>
+</html>
