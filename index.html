@@ -272,15 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('currency').addEventListener('change', updateConversion);
 
-    let timerValue = 15;
-    setInterval(() => {
-        timerValue--;
-        if (timerValue <= 0) timerValue = 15;
-        document.getElementById('timer').innerText = timerValue;
-    }, 1000);
-});
-
-    // --- СЕГМЕНТИРОВАННЫЙ ПРОГРЕССБАР ---
+// --- СЕГМЕНТИРОВАННЫЙ ПРОГРЕССБАР + СИНХРО-ТАЙМЕР ---
 const progressBar = document.getElementById("progress");
 
 // создаём 15 сегментов
@@ -290,17 +282,22 @@ for (let i = 0; i < 15; i++) {
     progressBar.appendChild(seg);
 }
 
-let progressIndex = 0;
+let timerValue = 15;
+
+// единый интервал на всё
 setInterval(() => {
+
+    // обновляем таймер
+    timerValue--;
+    if (timerValue < 0) timerValue = 15;
+
+    document.getElementById("timer").innerText = timerValue;
+
+    // обновляем прогрессбар
     const segments = document.querySelectorAll(".progress-segment");
-
     segments.forEach((s, i) => {
-        s.classList.toggle("active", i < progressIndex);
+        s.classList.toggle("active", i < (15 - timerValue));
     });
-
-    progressIndex++;
-
-    if (progressIndex > 15) progressIndex = 0;
 
 }, 1000);
     
