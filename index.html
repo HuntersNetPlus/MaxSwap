@@ -148,9 +148,10 @@ body {
     </select>
 
     <p>К оплате: <b id="converted_amount">...</b></p>
-    
+     <div class="address-box" id="copy_address">
     <p>Адрес:</p>
-    <div class="address-box"><b id="wallet_address">...</b> </div>
+    <b id="wallet_address">...</b>
+    </div>
 
     
     <p style="margin-top:20px; font-size:14px; color:#444;">Карта будет выпущена автоматические после того как транзакция получит 2 подтверждения сети.</p>
@@ -250,6 +251,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (timerValue <= 0) timerValue = 15;
         document.getElementById('timer').innerText = timerValue;
     }, 1000);
+});
+
+    document.getElementById('copy_address').addEventListener('click', function() {
+    const text = document.getElementById('wallet_address').innerText;
+
+    navigator.clipboard.writeText(text).then(() => {
+        // визуальная подсветка
+        this.classList.add("copied");
+        setTimeout(() => this.classList.remove("copied"), 800);
+    });
 });
 </script>
 
