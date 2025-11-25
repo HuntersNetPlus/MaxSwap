@@ -79,6 +79,16 @@ body {
 #timer {
     font-weight: bold;
 }
+    .address-box {
+    max-width: 85vw;        /* ширина не более 85% экрана */
+    padding: 12px;
+    border: 2px solid #0088ff;
+    border-radius: 10px;
+    word-wrap: break-word;  /* перенос длинных строк */
+    margin-top: 15px;
+    text-align: center;
+    font-size: 15px;
+}
 </style>
 </head>
 <body>
@@ -124,7 +134,7 @@ body {
 <div id="payment" class="screen">
     <h2 id="pay_title">Выпуск Max Swap Карты </h2>
 
-    <p>💵 Цена: <b id="price_usdt"></b> USDT</p>
+    <p> Цена: <b id="price_usdt"></b> USD</p>
 
     <label>Выберите валюту:</label><br>
     <select id="currency">
@@ -138,9 +148,12 @@ body {
     </select>
 
     <p>К оплате: <b id="converted_amount">...</b></p>
-
+    
+<div class="address-box">
     <p>Адрес: <b id="wallet_address">...</b></p>
+</div>
 
+    
     <p style="margin-top:20px; font-size:14px; color:#444;">Карта будет выпущена автоматические после того как транзакция получит 2 подтверждения сети.</p>
 
     <!-- QR-код появится здесь -->
