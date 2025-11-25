@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Max Swap Карта </title>
+<title>Max Swap Карта</title>
 <style>
 body {
     margin: 0;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     background: #ffffff;
 }
-.screen { 
+.screen {
     display: none;
     height: 100vh;
     padding: 20px;
@@ -62,14 +62,16 @@ body {
     align-items: center;
     font-size: 22px;
 }
-    #payment {
-    display: flex;
+
+/* Центрирование контента на payment только когда экран активен */
+#payment {
+    /* не задаём display здесь — чтобы .screen{display:none} работал */
     font-size: 15px;
     flex-direction: column;
-    align-items: center;   /* центр по горизонтали */
-    text-align: center;    /* центр текста */
+    align-items: center;
+    text-align: center;
 }
-    #payment.active {
+#payment.active {
     display: flex !important;
     flex-direction: column;
     align-items: center;
@@ -79,7 +81,7 @@ body {
 #timer {
     font-weight: bold;
 }
-    .address-box {
+.address-box {
     max-width: 85vw;        /* ширина не более 85% экрана */
     padding: 12px;
     border: 2px dashed #bac1b1;
@@ -89,20 +91,18 @@ body {
     text-align: center;
     font-size: 13px;
     cursor: pointer; /* чтобы показывалось, что можно нажать */
-        
 }
-    .copied {
+.copied {
     background: #e0ffe0;
     border-color: #00aa00;
     transition: 1s;
 }
-    .progress-bar {
+.progress-bar {
     display: flex;
     justify-content: center;
     gap: 4px;
     margin: 10px 0;
 }
-
 .progress-segment {
     width: 12px;
     height: 20px;
@@ -110,7 +110,6 @@ body {
     border-radius: 4px;
     transition: background 0.3s;
 }
-
 .progress-segment.active {
     background: #0088ff; /* синий активный */
 }
@@ -131,7 +130,7 @@ body {
     <h2>Выберите карту для выпуска</h2>
 
     <div class="option" data-name="Max Swap Online Card" data-price="52.5">
-        <img src="https://github.com/Vdffrfr333434/MSTest/blob/main/Card11.png?raw=true">
+        <img src="https://github.com/Vdffrfr333434/MSTest/blob/main/Card11.png?raw=true" alt="">
         <div>
             Max Swap Online Card - 52.5 USDT
             <div class="desc">Подойдёт для покупок в интернете, подписок, оплаты онлайн-сервисов (Netflix, ChatGPT, Spotify и тд.) </div>
@@ -139,7 +138,7 @@ body {
     </div>
 
     <div class="option" data-name="Max Swap NFC Card" data-price="52.5">
-        <img src="https://github.com/Vdffrfr333434/MSTest/blob/main/Card22.png?raw=true">
+        <img src="https://github.com/Vdffrfr333434/MSTest/blob/main/Card22.png?raw=true" alt="">
         <div>
             Max Swap NFC Card - 52.5 USDT
             <div class="desc">Подойдёт для привязки к GooglePay/ApplePay и оплаты через NFC-терминалы.</div>
@@ -147,7 +146,7 @@ body {
     </div>
 
     <div class="option" data-name="Max Swap Ultima" data-price="99">
-        <img src="https://github.com/Vdffrfr333434/MSTest/blob/main/Card33.png?raw=true">
+        <img src="https://github.com/Vdffrfr333434/MSTest/blob/main/Card33.png?raw=true" alt="">
         <div>
             Max Swap Ultima - 99 USDT
             <div class="desc">Комбинация двух предыдущих пунктов. Карта подойдёт для любых целей.</div>
@@ -173,20 +172,19 @@ body {
     </select>
 
     <p>К оплате: <b id="converted_amount">...</b></p>
-     Адрес для перевода (копируется при нажатии):
-     <div class="address-box" id="copy_address">
+
+    <div class="address-box" id="copy_address">
        <b id="wallet_address">...</b>
     </div>
 
-    
     <p style="margin-top:20px; font-size:14px; color:#444;">✓ Карта будет выпущена автоматически после того как транзакция получит 2 подтверждения сети.</p>
 
     <!-- QR-код появится здесь -->
     <div id="qrcode" style="margin-top:20px;"></div>
 
-    <div id="progress" class="progress-bar"></div>
+    <div id="progress" class="progress-bar" aria-hidden="true"></div>
 
-    <div style="margin-top:10px; font-size:15px; font-weight:bold; text-align:center;"> <br>
+    <div style="margin-top:10px; font-size:15px; font-weight:bold; text-align:center;">
         ⚙️ Статус: ожидает оплаты. Обновление статуса через: <span id="timer">15</span> сек
     </div>
 </div>
@@ -233,17 +231,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const cur = document.getElementById("currency").value;
 
         // Очистка предыдущего QR-кода
-        document.getElementById('qrcode').innerHTML = "";
-        // Генерация нового QR-кода
-        new QRCode(document.getElementById('qrcode'), {
-            text: wallets[cur],
-            width: 180,
-            height: 180
-        });
+        const qEl = document.getElementById('qrcode');
+        qEl.innerHTML = "";
 
-        if (cur.includes("USDT")) {
+        // Генерация нового QR-кода (адреса)
+        if (wallets[cur]) {
+            new QRCode(qEl, {
+                text: wallets[cur],
+                width: 180,
+                height: 180
+            });
+        }
+
+        // show address immediately
+        document.getElementById('wallet_address').innerText = wallets[cur] || '—';
+
+        if (cur.startsWith("USDT")) {
             document.getElementById('converted_amount').innerText = `${selected.price} USDT`;
-            document.getElementById('wallet_address').innerText = wallets[cur];
             return;
         }
 
@@ -251,65 +255,71 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,litecoin,usd-coin&vs_currencies=usd");
             const data = await res.json();
             const priceCryptoUSD = {
-                BTC: data.bitcoin.usd,
-                ETH: data.ethereum.usd,
-                LTC: data.litecoin.usd,
-                USDC: data["usd-coin"].usd
+                BTC: data.bitcoin?.usd || null,
+                ETH: data.ethereum?.usd || null,
+                LTC: data.litecoin?.usd || null,
+                USDC: data["usd-coin"]?.usd || null
             };
-            const converted = (selected.price / priceCryptoUSD[cur]).toFixed(6);
+
+            const rate = priceCryptoUSD[cur];
+            if (!rate) {
+                document.getElementById('converted_amount').innerText = "Курс недоступен";
+                return;
+            }
+
+            const converted = (selected.price / rate).toFixed(6);
             document.getElementById('converted_amount').innerText = `${converted} ${cur}`;
-            document.getElementById('wallet_address').innerText = wallets[cur];
-        } catch {
+        } catch (e) {
+            console.warn(e);
             document.getElementById('converted_amount').innerText = "Ошибка загрузки курса";
         }
     }
 
+    // кнопка открытия
     document.getElementById('welcomeBtn').addEventListener('click', () => openScreen('choose'));
 
+    // выбор опции
     document.querySelectorAll('#choose .option').forEach(opt => {
         opt.addEventListener('click', () => selectOption(opt.dataset.name, parseFloat(opt.dataset.price)));
     });
 
+    // смена валюты
     document.getElementById('currency').addEventListener('change', updateConversion);
 
-// --- СЕГМЕНТИРОВАННЫЙ ПРОГРЕССБАР + СИНХРО-ТАЙМЕР ---
-const progressBar = document.getElementById("progress");
-
-// создаём 15 сегментов
-for (let i = 0; i < 15; i++) {
-    let seg = document.createElement("div");
-    seg.classList.add("progress-segment");
-    progressBar.appendChild(seg);
-}
-
-let timerValue = 15;
-
-// единый интервал на всё
-setInterval(() => {
-
-    // обновляем таймер
-    timerValue--;
-    if (timerValue < 0) timerValue = 15;
-
-    document.getElementById("timer").innerText = timerValue;
-
-    // обновляем прогрессбар
-    const segments = document.querySelectorAll(".progress-segment");
-    segments.forEach((s, i) => {
-        s.classList.toggle("active", i < (15 - timerValue));
-    });
-
-}, 1000);
-    
-
+    // копирование адреса
     document.getElementById('copy_address').addEventListener('click', function() {
-    const text = document.getElementById('wallet_address').innerText;
-
-    navigator.clipboard.writeText(text).then(() => {
-        // визуальная подсветка
-        this.classList.add("copied");
-        setTimeout(() => this.classList.remove("copied"), 800);
+        const text = document.getElementById('wallet_address').innerText;
+        if (!text || text === '—') return;
+        navigator.clipboard.writeText(text).then(() => {
+            this.classList.add("copied");
+            setTimeout(() => this.classList.remove("copied"), 800);
+        }).catch(()=>{ /* ignore */ });
     });
+
+    // прогрессбар + синхронизованный таймер
+    const progressBar = document.getElementById("progress");
+    // создаём 15 сегментов (один раз)
+    for (let i = 0; i < 15; i++) {
+        let seg = document.createElement("div");
+        seg.classList.add("progress-segment");
+        progressBar.appendChild(seg);
+    }
+
+    let timerValue = 15;
+    // единый интервал
+    setInterval(() => {
+        timerValue--;
+        if (timerValue < 0) timerValue = 15;
+        document.getElementById("timer").innerText = timerValue;
+
+        const segments = document.querySelectorAll(".progress-segment");
+        // (15 - timerValue) активных сегментов
+        const activeCount = 15 - timerValue;
+        segments.forEach((s, i) => {
+            s.classList.toggle("active", i < activeCount);
+        });
+    }, 1000);
+
 });
 </script>
 
