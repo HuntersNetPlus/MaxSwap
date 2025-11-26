@@ -86,61 +86,64 @@ body {
     display: inline-block;
 }
 
-/* ---- ЗОЛОТЫЕ ЛУЧИ ---- */
-.qr-rays {
+/* --- КВАДРАТНОЕ ЗОЛОТОЕ СВЕЧЕНИЕ --- */
+.qr-border-glow {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 220%;
-    height: 220%;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(255,215,0,0.6), rgba(255,215,0,0) 65%);
-    mask-image: radial-gradient(circle, transparent 35%, black 70%);
-    animation: qrGoldRays 6s linear infinite;
-    opacity: 0.9;
-    filter: blur(12px);
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    border-radius: 8px;
+    box-shadow: 0 0 25px 8px rgba(255, 200, 0, 0.9),
+                0 0 50px 15px rgba(255, 180, 0, 0.7);
+    animation: qrGlowPulse 2.8s ease-in-out infinite;
     z-index: -2;
 }
 
-@keyframes qrGoldRays {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to   { transform: translate(-50%, -50%) rotate(360deg); }
+@keyframes qrGlowPulse {
+    0%   { box-shadow: 0 0 22px 7px rgba(255, 200, 0, 0.8), 0 0 40px 13px rgba(255, 180, 0, 0.6); }
+    50%  { box-shadow: 0 0 35px 12px rgba(255, 215, 0, 1),   0 0 65px 20px rgba(255, 190, 0, 0.9); }
+    100% { box-shadow: 0 0 22px 7px rgba(255, 200, 0, 0.8), 0 0 40px 13px rgba(255, 180, 0, 0.6); }
 }
 
-/* ---- ЗОЛОТЫЕ ЧАСТИЦЫ ---- */
+/* --- ЧАСТИЦЫ, ЛЕТЯЩИЕ ОТ КОНТУРА КВАДРАТА --- */
+
 .qr-particles {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    inset: 0;
     pointer-events: none;
+    overflow: visible;
     z-index: -1;
 }
 
-.qr-particles::before,
-.qr-particles::after {
-    content: "";
+/* Создаём 20 частиц */
+.qr-particles span {
     position: absolute;
-    width: 160%;
-    height: 160%;
-    top: -30%;
-    left: -30%;
-    background-image: radial-gradient(circle, rgba(255,215,0,0.9) 2px, transparent 3px);
-    background-size: 42px 42px;
-    animation: qrGoldParticles 7s linear infinite;
-    opacity: 0.8;
-    filter: blur(0.5px);
+    width: 5px;
+    height: 5px;
+    background: radial-gradient(circle, gold, rgba(255,200,0,0));
+    border-radius: 50%;
+    animation: particleFly 1.6s linear infinite;
+    opacity: 0.9;
 }
 
-.qr-particles::after {
-    animation-duration: 10s;
-    animation-direction: reverse;
-    opacity: 0.5;
+/* Генерация случайного старта */
+.qr-particles span:nth-child(odd) {
+    animation-duration: 2s;
 }
 
-@keyframes qrGoldParticles {
-    from { transform: rotate(0deg) scale(1); }
-    to   { transform: rotate(360deg) scale(1.15); }
+/* Анимация вылета наружу */
+@keyframes particleFly {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(0.7);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--tx), var(--ty)) scale(1.4);
+    }
 }
+
 
     
 
@@ -509,6 +512,83 @@ function nextSlide() {
 
 setInterval(nextSlide, 3000); // каждые 3 секунды
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// --- ГЕНЕРАЦИЯ ЧАСТИЦ ВОКРУГ КВАДРАТА ---
+const particleContainer = document.querySelector(".qr-particles");
+
+for (let i = 0; i < 20; i++) {
+    const p = document.createElement("span");
+
+    // — случайная сторона квадрата —
+    const side = Math.floor(Math.random() * 4);
+
+    let x = 0, y = 0;
+
+    if (side === 0) { 
+        // сверху
+        x = Math.random() * 100;
+        y = 0;
+        p.style.top = "0%";
+        p.style.left = x + "%";
+        p.style.setProperty("--tx", `${(Math.random() - 0.5) * 200}%`);
+        p.style.setProperty("--ty", `-150%`);
+    }
+    else if (side === 1) {
+        // снизу
+        x = Math.random() * 100;
+        y = 100;
+        p.style.top = "100%";
+        p.style.left = x + "%";
+        p.style.setProperty("--tx", `${(Math.random() - 0.5) * 200}%`);
+        p.style.setProperty("--ty", `150%`);
+    }
+    else if (side === 2) {
+        // слева
+        y = Math.random() * 100;
+        p.style.top = y + "%";
+        p.style.left = "0%";
+        p.style.setProperty("--tx", `-150%`);
+        p.style.setProperty("--ty", `${(Math.random() - 0.5) * 200}%`);
+    }
+    else {
+        // справа
+        y = Math.random() * 100;
+        p.style.top = y + "%";
+        p.style.left = "100%";
+        p.style.setProperty("--tx", `150%`);
+        p.style.setProperty("--ty", `${(Math.random() - 0.5) * 200}%`);
+    }
+
+    particleContainer.appendChild(p);
+}
+
+
+
+
+
+
+
+
+
+
+    
+    
 
     
 </script>
