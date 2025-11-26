@@ -18,6 +18,10 @@ body {
 }
 .active { display: block; }
 
+
+
+    
+
 #slideshow-container {
     position: relative;
     width: 80vw;
@@ -29,25 +33,27 @@ body {
 
 .slide {
     position: absolute;
+    top: 50%;
+    left: 50%;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain; /* сохраняет пропорции */
     border-radius: 12px;
+    transform: translate(-50%, -50%) scale(0.9); /* центрируем + уменьшаем */
     opacity: 0;
-    transform: scale(0.9);
     transition: opacity 1s ease, transform 1s ease;
+    transform-origin: center center; /* масштабирование из центра */
 }
 
 .slide.active {
     opacity: 1;
-    transform: scale(1);
+    transform: translate(-50%, -50%) scale(1);
 }
 
 .slide.out {
     opacity: 0;
-    transform: scale(0.1);
+    transform: translate(-50%, -50%) scale(0.1);
 }
-
 
 
     
@@ -416,7 +422,6 @@ function nextSlide() {
     current.classList.remove("active");
     current.classList.add("out");
 
-    // следующий слайд
     index = (index + 1) % total;
     const next = slides[index];
     next.classList.remove("out");
