@@ -119,8 +119,8 @@ body {
 /* Создаём 20 частиц */
 .qr-particles span {
     position: absolute;
-    width: 2px;
-    height: 2px;
+    width: 0px;
+    height: 0px;
     background: radial-gradient(circle, gold, rgba(255,200,0,0));
     border-radius: 50%;
     animation: particleFly 3.2s linear infinite;
@@ -408,8 +408,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (wallets[cur]) {
             new QRCode(qEl, {
                 text: wallets[cur],
-                width: 200,
-                height: 200
+                width: 250,
+                height: 250
             });
         }
 
