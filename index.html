@@ -248,6 +248,56 @@ body {
 #timer {
     font-weight: bold;
 }
+
+
+
+
+
+
+.wallet-box {
+    position: relative;
+    width: 80%;          /* размер блока */
+    margin: 20px auto;
+    padding: 15px;
+}
+
+.wallet-content {
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    font-size: 14px;
+    overflow-wrap: break-word;
+}
+
+/* Анимированная рамка */
+.marching-ants {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+}
+
+.marching-ants rect {
+    animation: dash 1s linear infinite;
+}
+
+@keyframes dash {
+    0% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -20; }
+}
+
+
+
+
+
+
+
+
+
+
+    
 .address-box {
     max-width: 75vw;        /* ширина не более 85% экрана */
     padding: 12px;
@@ -401,9 +451,18 @@ body {
   </div>
 
         
-    <div class="address-box" id="copy_address">
-       <b id="wallet_address">...</b>
-    </div>
+ <div class="wallet-box">
+    <div class="wallet-content" id="wallet_address"></div>
+
+    <svg class="marching-ants" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <rect x="1" y="1" width="98" height="98"
+              fill="none"
+              stroke="#4aa3ff"
+              stroke-width="2"
+              stroke-dasharray="5 5">
+        </rect>
+    </svg>
+</div>
 
         <!-- QR-код появится здесь -->
 <br>
