@@ -135,6 +135,14 @@ body {
 
 <!-- SCREEN 1 -->
 <div id="welcome" class="screen active" style="text-align:center;">
+
+<div style="width:100%; text-align:center;">
+    <img id="webpSlider" 
+         src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Shopping%20Bags.webp?raw=true" 
+         style="width:75%; max-height:75vh; object-fit:contain; border-radius:12px;" />
+</div>
+
+    
     <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Shopping%20Bags.webp?raw=true" style="width:90vw; max-height:90vh; object-fit:contain; margin-top:20px;">
    
      <div  style="text-align:center; color:white">
@@ -148,7 +156,7 @@ body {
       <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Identification%20Card.webp?raw=true" style="width:200px; display:block; margin:0 auto;">
  
  <div  style="text-align:center; color:white; font-weight:bold;">
-    Выберите карту для выпуска
+    Выберите тип карты для выпуска:
 </div >
       <div class="option" data-name="Max Swap Online Card" data-price="52.5">
         <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Laptop.webp?raw=true" alt="">
@@ -350,6 +358,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 1000);
 
 });
+
+
+    const images = [
+    "https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Shopping%20Bags.webp?raw=true",
+    "https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Purse.webp?raw=true",
+    "https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Shopping%20Cart.webp?raw=true"
+];
+
+let current = 0;
+
+function changeSlide() {
+    const slider = document.getElementById("webpSlider");
+    current = (current + 1) % images.length;
+
+    // плавная смена — необязательно
+    slider.style.opacity = 0;
+    setTimeout(() => {
+        slider.src = images[current];
+        slider.style.opacity = 1;
+    }, 200);
+}
+
+// смена каждые 3 секунды (можно изменить)
+setInterval(changeSlide, 3000);
 </script>
 
 </body>
