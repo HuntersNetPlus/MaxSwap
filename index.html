@@ -86,13 +86,13 @@ body {
     display: inline-block;
     cursor: pointer;
     color: #0088ff;
-    font-weight: bold;
+    
 }
 .tooltiptext {
     visibility: hidden;
     width: 250px;
     padding: 10px;
-    border-radius: 12px;
+    border-radius: 6px;
 
     /* Эффект стекла */
     background: rgba(255, 255, 255, 0.15); /* прозрачность фона */
@@ -101,7 +101,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.3);
 
     color: #fff;
-    text-align: left;
+    text-align: center;
     font-size: 14px;
 
     position: fixed;
@@ -398,7 +398,7 @@ body {
   Статус: ожидание 
   <span class="tooltip">?
     <span class="tooltiptext">
-      Карта будет выпущена автоматически после получения 2 подтверждений сети.
+      Карта будет выпущена автоматически когда транзакция получит как минимум 4 подтверждения сети.
     </span>
   </span>
 </p>
