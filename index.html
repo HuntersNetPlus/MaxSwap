@@ -86,28 +86,28 @@ body {
     display: inline-block;
 }
 
-/* ---- ЛУЧИ ---- */
+/* ---- ЗОЛОТЫЕ ЛУЧИ ---- */
 .qr-rays {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 200%;
-    height: 200%;
+    width: 220%;
+    height: 220%;
     transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(255,255,255,0.4), rgba(255,255,255,0) 60%);
-    mask-image: radial-gradient(circle, transparent 40%, black 70%);
-    animation: qrRaysRotate 6s linear infinite;
-    opacity: 0.6;
+    background: radial-gradient(circle, rgba(255,215,0,0.6), rgba(255,215,0,0) 65%);
+    mask-image: radial-gradient(circle, transparent 35%, black 70%);
+    animation: qrGoldRays 6s linear infinite;
+    opacity: 0.9;
+    filter: blur(12px);
     z-index: -2;
 }
 
-@keyframes qrRaysRotate {
+@keyframes qrGoldRays {
     from { transform: translate(-50%, -50%) rotate(0deg); }
     to   { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* ---- ЧАСТИЦЫ ---- */
-
+/* ---- ЗОЛОТЫЕ ЧАСТИЦЫ ---- */
 .qr-particles {
     position: absolute;
     top: 0; left: 0;
@@ -120,24 +120,26 @@ body {
 .qr-particles::after {
     content: "";
     position: absolute;
-    width: 140%;
-    height: 140%;
-    top: -20%;
-    left: -20%;
-    background-image: radial-gradient(circle, rgba(255,255,255,0.8) 2px, transparent 3px);
-    background-size: 40px 40px;
-    animation: particlesFloat 5s linear infinite;
-    opacity: 0.7;
+    width: 160%;
+    height: 160%;
+    top: -30%;
+    left: -30%;
+    background-image: radial-gradient(circle, rgba(255,215,0,0.9) 2px, transparent 3px);
+    background-size: 42px 42px;
+    animation: qrGoldParticles 7s linear infinite;
+    opacity: 0.8;
+    filter: blur(0.5px);
 }
 
 .qr-particles::after {
-    animation-duration: 7s;
+    animation-duration: 10s;
     animation-direction: reverse;
+    opacity: 0.5;
 }
 
-@keyframes particlesFloat {
+@keyframes qrGoldParticles {
     from { transform: rotate(0deg) scale(1); }
-    to   { transform: rotate(360deg) scale(1.2); }
+    to   { transform: rotate(360deg) scale(1.15); }
 }
 
     
