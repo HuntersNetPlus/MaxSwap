@@ -156,7 +156,7 @@ body {
     background: #010101; /* синий активный */
 }
     #currency {
-    width: 50vw;
+    width: 25vw;
     padding: 12px;
     font-size: 14px;
     border-radius: 6px;
@@ -248,7 +248,7 @@ body {
 
     <div style="color:#6ab2f2">  Стоимость выпуска карты : <b id="price_usdt"></b> USD </div>
 
-    <label>Доступные валюты для оплаты:</label><br>
+    <label>Доступные валюты для оплаты:</label>
     <select id="currency">
         <option value="USDT_TRC20">USDT TRC-20</option>
         <option value="USDT_ERC20">USDT ERC-20</option>
@@ -259,13 +259,13 @@ body {
         <option value="LTC">LTC</option>
     </select>
 
-    <p>К оплате: <b id="converted_amount">...</b></p>
+    <p><img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Money%20With%20Wings.webp?raw=true" style="width:20px;">К оплате: <b id="converted_amount">...</b></p>
 
     <div class="address-box" id="copy_address">
        <b id="wallet_address">...</b>
     </div>
 
-    <p style="margin-top:20px; font-size:14px; color:#444;">✓ Карта будет выпущена автоматически после того как транзакция получит 2 подтверждения сети.</p>
+    <p style="margin-top:20px; font-size:14px; color:white;"> Адрес копируется при нажатии.</p>
 
     <!-- QR-код появится здесь -->
     <div id="qrcode" style="margin-top:20px;"></div>
