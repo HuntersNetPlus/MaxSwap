@@ -206,14 +206,14 @@ body {
     font-weight: bold;
 }
 .address-box {
-    max-width: 80vw;        /* ширина не более 85% экрана */
+    max-width: 70vw;        /* ширина не более 85% экрана */
     padding: 12px;
     border: 1px dashed #6ab2f2;
     border-radius: 4px;
     word-wrap: break-word;  /* перенос длинных строк */
     margin-top: 15px;
     text-align: center;
-    font-size: 13px;
+    font-size: 10px;
     cursor: pointer; /* чтобы показывалось, что можно нажать */
 }
 .copied {
@@ -349,6 +349,7 @@ body {
     </select>
 
     <p>Сумма в выбранной валюте: <b id="converted_amount">...</b></p>
+    Карта будет выпущена автоматически, когда транзакция получит как минимум 4 подтверждения сети. 
     <div class="address-box" id="copy_address">
        <b id="wallet_address">...</b>
     </div>
