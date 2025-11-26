@@ -593,18 +593,17 @@ setInterval(nextSlide, 3000); // каждые 3 секунды
 
 document.querySelectorAll('.tooltip').forEach(t => {
     t.addEventListener('click', function(e) {
-        this.classList.toggle('show');
+        const tooltipText = this.querySelector('.tooltiptext');
+
+        // Показ тултипа
+        this.classList.add('show');
+
+        // Автозакрытие через 3 секунды
+        setTimeout(() => {
+            this.classList.remove('show');
+        }, 3000); // 3000 мс = 3 сек
     });
 });
-
-document.addEventListener('click', function(e) {
-    document.querySelectorAll('.tooltip').forEach(t => {
-        if (!t.contains(e.target)) {
-            t.classList.remove('show');
-        }
-    });
-});
-
 
 
 
