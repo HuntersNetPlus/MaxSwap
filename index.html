@@ -248,98 +248,21 @@ body {
 #timer {
     font-weight: bold;
 }
-
-
-
-
-
-
-
-    .wallet-box {
-    position: relative;
-    width: 80%;          /* размер блока */
-    margin: 20px auto;
-    padding: 15px;
-}
-
-.wallet-content {
-    background: rgba(255,255,255,0.1);
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    color: white;
-    font-size: 14px;
-    overflow-wrap: break-word;
-}
-
-/* Анимированная рамка */
-.marching-ants {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-}
-
-.marching-ants rect {
-    animation: dash 1s linear infinite;
-}
-
-@keyframes dash {
-    0% { stroke-dashoffset: 0; }
-    100% { stroke-dashoffset: -20; }
-}
-    
-
-
-
-.address-animated {
-    max-width: 75vw;
+.address-box {
+    max-width: 75vw;        /* ширина не более 85% экрана */
     padding: 12px;
     border: 2px dashed #6ab2f2;
     border-radius: 4px;
-    word-wrap: break-word;
+    word-wrap: break-word;  /* перенос длинных строк */
     text-align: center;
     font-size: 10px;
-    cursor: pointer;
-    position: relative;
+    cursor: pointer; /* чтобы показывалось, что можно нажать */
 }
-
-/* Линия “бегущего” пунктира */
-.address-animated {
-    border: 2px dashed #6ab2f2;
-    animation: dashmove 1.2s linear infinite;
+.copied {
+    background: #6ab2f2;
+    border-color: #00aa00;
+    transition: 1s;
 }
-
-@keyframes dashmove {
-    to {
-        border-color: #6ab2f2;
-        border-width: 2px;
-        border-style: dashed;
-        border-spacing: 10px;
-        border-image-slice: 1;
-        border-image-source: repeating-linear-gradient(
-            90deg,
-            #6ab2f2 0 5px,
-            transparent 5px 10px
-        );
-        /* Сдвиг анимации */
-        border-image-outset: 0;
-    }
-}
-
-/* Эффект "скопировано" */
-.address-animated.copied {
-    background: none !important; /* фон нельзя — убираем */
-    border-color: #00ff88 !important;
-}
-
-
-
-
-
-
-
- 
 .progress-bar {
     display: flex;
     max-width: 50vw
@@ -478,18 +401,9 @@ body {
   </div>
 
         
- <div class="wallet-box">
-    <div class="wallet-content address-animated" id="wallet_address"></div>
-
-    <svg class="marching-ants" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <rect x="1" y="1" width="98" height="98"
-              fill="none"
-              stroke="#4aa3ff"
-              stroke-width="2"
-              stroke-dasharray="5 5">
-        </rect>
-    </svg>
-</div>
+    <div class="address-box" id="copy_address">
+       <b id="wallet_address">...</b>
+    </div>
 
         <!-- QR-код появится здесь -->
 <br>
@@ -662,15 +576,7 @@ setInterval(nextSlide, 3000); // каждые 3 секунды
 
 
 
-document.addEventListener("click", (e) => {
-    if (e.target.id === "wallet_address") {
-        const text = e.target.innerText;
-        navigator.clipboard.writeText(text).then(() => {
-            e.target.classList.add("copied");
-            setTimeout(() => e.target.classList.remove("copied"), 600);
-        });
-    }
-});
+
 
 
 
