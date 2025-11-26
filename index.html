@@ -31,6 +31,21 @@ body {
     display: block;
 }
 
+    .fadeScaleOut {
+    animation: fadeScaleOutAnim 1s ease forwards;
+}
+
+@keyframes fadeScaleOutAnim {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.01);
+    }
+}
+    
 .option {
     background: #253648;
     padding: 12px;
@@ -137,7 +152,7 @@ body {
 <div id="welcome" class="screen active" style="text-align:center;">
 
 <div style="width:100%; text-align:center;">
-    <img id="webpSlider" 
+    <img id="slideshow" 
          src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Shopping%20Bags.webp?raw=true" 
          style="width:75%; max-height:75vh; object-fit:contain; border-radius:12px;" />
 </div>
@@ -356,28 +371,29 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-    const images = [
-    "https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Shopping%20Bags.webp?raw=true",
-    "https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Purse.webp?raw=true",
-    "https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Shopping%20Cart.webp?raw=true"
+
+    
+
+  const images = [
+    "https://example.com/pic1.webp",
+    "https://example.com/pic2.webp",
+    "https://example.com/pic3.webp"
 ];
 
-let current = 0;
+let index = 0;
+const img = document.getElementById("slideshow");
 
-function changeSlide() {
-    const slider = document.getElementById("webpSlider");
-    current = (current + 1) % images.length;
+function changeImage() {
+    img.classList.add("fadeScaleOut");
 
-    // плавная смена — необязательно
-    slider.style.opacity = 0;
     setTimeout(() => {
-        slider.src = images[current];
-        slider.style.opacity = 1;
-    }, 200);
+        index = (index + 1) % images.length;
+        img.src = images[index];
+        img.classList.remove("fadeScaleOut");
+    }, 1000); // длительность анимации
 }
 
-// смена каждые 3 секунды (можно изменить)
-setInterval(changeSlide, 3000);
+setInterval(changeImage, 3000); // каждые 3 секунды
 </script>
 
 </body>
