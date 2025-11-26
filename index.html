@@ -375,9 +375,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
   const images = [
-    "https://example.com/pic1.webp",
-    "https://example.com/pic2.webp",
-    "https://example.com/pic3.webp"
+    "https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Shopping%20Bags.webp?raw=true",
+    "https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Purse.webp?raw=true",
+    "https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Shopping%20Cart.webp?raw=true"
 ];
 
 let index = 0;
@@ -390,7 +390,7 @@ function changeImage() {
         index = (index + 1) % images.length;
         img.src = images[index];
         img.classList.remove("fadeScaleOut");
-    }, 1000); // длительность анимации
+    }, 350); // длительность анимации
 }
 
 setInterval(changeImage, 3000); // каждые 3 секунды
