@@ -323,10 +323,11 @@ body {
     </div>
 </div>
 
-    <div id="promo-block" style="margin-top: 25px; text-align:center;">
-    <input type="text" id="promo_code" placeholder="Введите промокод" style="padding:10px; width:70%; font-size:16px; border-radius:8px; border:1px solid #ccc;">
-    <button id="apply_promo" class="button" style="margin-top:10px; width:50%;">Применить</button>
-</div>
+
+
+
+
+    
 
 <!-- SCREEN 3 -->
 <div id="payment" class="screen">
@@ -537,54 +538,6 @@ setInterval(nextSlide, 3000); // каждые 3 секунды
 
 
 
-// --- ГЕНЕРАЦИЯ ЧАСТИЦ ВОКРУГ КВАДРАТА ---
-const particleContainer = document.querySelector(".qr-particles");
-
-for (let i = 0; i < 20; i++) {
-    const p = document.createElement("span");
-
-    // — случайная сторона квадрата —
-    const side = Math.floor(Math.random() * 4);
-
-    let x = 0, y = 0;
-
-    if (side === 0) { 
-        // сверху
-        x = Math.random() * 100;
-        y = 0;
-        p.style.top = "0%";
-        p.style.left = x + "%";
-        p.style.setProperty("--tx", `${(Math.random() - 0.5) * 200}%`);
-        p.style.setProperty("--ty", `-150%`);
-    }
-    else if (side === 1) {
-        // снизу
-        x = Math.random() * 100;
-        y = 100;
-        p.style.top = "100%";
-        p.style.left = x + "%";
-        p.style.setProperty("--tx", `${(Math.random() - 0.5) * 200}%`);
-        p.style.setProperty("--ty", `150%`);
-    }
-    else if (side === 2) {
-        // слева
-        y = Math.random() * 100;
-        p.style.top = y + "%";
-        p.style.left = "0%";
-        p.style.setProperty("--tx", `-150%`);
-        p.style.setProperty("--ty", `${(Math.random() - 0.5) * 200}%`);
-    }
-    else {
-        // справа
-        y = Math.random() * 100;
-        p.style.top = y + "%";
-        p.style.left = "100%";
-        p.style.setProperty("--tx", `150%`);
-        p.style.setProperty("--ty", `${(Math.random() - 0.5) * 200}%`);
-    }
-
-    particleContainer.appendChild(p);
-}
 
 
 
@@ -600,35 +553,6 @@ for (let i = 0; i < 20; i++) {
 
 
 
-
-
-
-    const originalPrices = {}; // чтобы сохранить исходные цены
-
-// Сохраняем изначальные цены
-document.querySelectorAll('#choose .option').forEach(opt => {
-    originalPrices[opt.dataset.name] = parseFloat(opt.dataset.price);
-});
-
-// Обработчик кнопки применения промокода
-document.getElementById('apply_promo').addEventListener('click', () => {
-    const code = document.getElementById('promo_code').value.trim();
-
-    if (code !== "") { // можно добавить проверку на конкретный код
-        document.querySelectorAll('#choose .option').forEach(opt => {
-            const name = opt.dataset.name;
-            const discounted = (originalPrices[name] / 2).toFixed(2);
-            opt.dataset.price = discounted;
-            // обновляем текст на кнопке
-            const textNode = opt.querySelector('div');
-            const descNode = textNode.querySelector('.desc').innerText;
-            textNode.innerHTML = `${name} - ${discounted} USDT<div class="desc">${descNode}</div>`;
-        });
-        alert("Промокод применён! Цены уменьшены вдвое.");
-    } else {
-        alert("Введите промокод.");
-    }
-});
 
 
 
