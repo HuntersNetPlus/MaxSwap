@@ -82,38 +82,31 @@ body {
 
 
 
-.tooltip {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-    color: #0088ff;
-    font-weight: bold;
-}
-
 .tooltiptext {
     visibility: hidden;
     width: 250px;
-    background-color: #333;
+    padding: 10px;
+    border-radius: 12px;
+
+    /* Эффект стекла */
+    background: rgba(255, 255, 255, 0.15); /* прозрачность фона */
+    backdrop-filter: blur(10px);           /* размытие фона за тултипом */
+    -webkit-backdrop-filter: blur(10px);   /* для Safari */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
     color: #fff;
     text-align: left;
-    padding: 8px;
-    border-radius: 6px;
+    font-size: 14px;
 
-    position: fixed; /* фиксированное позиционирование относительно окна */
-    top: 150px;      /* отступ сверху (можно менять под нужное место) */
-    left: 50%;       /* центр по горизонтали */
+    position: fixed;
+    top: 150px;
+    left: 50%;
     transform: translateX(-50%);
-
     z-index: 9999;
+
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s, transform 0.3s;
 }
-
-.tooltip.show .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-}
-
 
 
 
