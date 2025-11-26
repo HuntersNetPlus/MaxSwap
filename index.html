@@ -254,7 +254,8 @@ body {
 
 
 
-.wallet-box {
+
+    .wallet-box {
     position: relative;
     width: 80%;          /* размер блока */
     margin: 20px auto;
@@ -287,32 +288,58 @@ body {
     0% { stroke-dashoffset: 0; }
     100% { stroke-dashoffset: -20; }
 }
-
-
-
-
-
-
-
-
-
-
     
-.address-box {
-    max-width: 75vw;        /* ширина не более 85% экрана */
+
+
+
+.address-animated {
+    max-width: 75vw;
     padding: 12px;
     border: 2px dashed #6ab2f2;
     border-radius: 4px;
-    word-wrap: break-word;  /* перенос длинных строк */
+    word-wrap: break-word;
     text-align: center;
     font-size: 10px;
-    cursor: pointer; /* чтобы показывалось, что можно нажать */
+    cursor: pointer;
+    position: relative;
 }
-.copied {
-    background: #6ab2f2;
-    border-color: #00aa00;
-    transition: 1s;
+
+/* Линия “бегущего” пунктира */
+.address-animated {
+    border: 2px dashed #6ab2f2;
+    animation: dashmove 1.2s linear infinite;
 }
+
+@keyframes dashmove {
+    to {
+        border-color: #6ab2f2;
+        border-width: 2px;
+        border-style: dashed;
+        border-spacing: 10px;
+        border-image-slice: 1;
+        border-image-source: repeating-linear-gradient(
+            90deg,
+            #6ab2f2 0 5px,
+            transparent 5px 10px
+        );
+        /* Сдвиг анимации */
+        border-image-outset: 0;
+    }
+}
+
+/* Эффект "скопировано" */
+.address-animated.copied {
+    background: none !important; /* фон нельзя — убираем */
+    border-color: #00ff88 !important;
+}
+
+
+
+
+
+
+
+ 
 .progress-bar {
     display: flex;
     max-width: 50vw
@@ -452,7 +479,7 @@ body {
 
         
  <div class="wallet-box">
-    <div class="wallet-content" id="wallet_address"></div>
+    <div class="wallet-content address-animated" id="wallet_address"></div>
 
     <svg class="marching-ants" viewBox="0 0 100 100" preserveAspectRatio="none">
         <rect x="1" y="1" width="98" height="98"
@@ -635,7 +662,15 @@ setInterval(nextSlide, 3000); // каждые 3 секунды
 
 
 
-
+document.addEventListener("click", (e) => {
+    if (e.target.id === "wallet_address") {
+        const text = e.target.innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            e.target.classList.add("copied");
+            setTimeout(() => e.target.classList.remove("copied"), 600);
+        });
+    }
+});
 
 
 
