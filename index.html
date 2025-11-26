@@ -324,16 +324,17 @@ document.addEventListener('DOMContentLoaded', () => {
     async function updateConversion() {
         const cur = document.getElementById("currency").value;
 
-    // Очистка предыдущего QR-кода
-document.getElementById('qrcode').innerHTML = "";
-// Генерация нового QR-кода с белыми линиями и прозрачным фоном
-new QRCode(document.getElementById('qrcode'), {
-    text: wallets[cur],
-    width: 180,
-    height: 180,
-    colorDark: "#ffffff",     // белые линии
-    colorLight: "transparent" // прозрачный фон
-});
+        // Очистка предыдущего QR-кода
+        const qEl = document.getElementById('qrcode');
+        qEl.innerHTML = "";
+
+        // Генерация нового QR-кода (адреса)
+        if (wallets[cur]) {
+            new QRCode(qEl, {
+                text: wallets[cur],
+                width: 180,
+                height: 180
+            });
         }
 
         // show address immediately
