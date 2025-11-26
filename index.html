@@ -126,7 +126,7 @@ body {
 .address-box {
     max-width: 85vw;        /* ширина не более 85% экрана */
     padding: 12px;
-    border: 2px dashed #6ab2f2;
+    border: 1px dashed #6ab2f2;
     border-radius: 4px;
     word-wrap: break-word;  /* перенос длинных строк */
     margin-top: 15px;
@@ -141,6 +141,7 @@ body {
 }
 .progress-bar {
     display: flex;
+    max-width: 50vw
     justify-content: center;
     gap: 4px;
     margin: 10px 0;
@@ -267,9 +268,7 @@ body {
 
         <!-- QR-код появится здесь -->
     <div id="qrcode" style="margin-top:20px;"></div>
-    <canvas style="mix-blend-mode: screen;"></canvas>
-<br>
-    
+        
     <div id="progress" class="progress-bar" aria-hidden="true"></div>
 
     <br>
