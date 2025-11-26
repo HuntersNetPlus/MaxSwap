@@ -126,8 +126,8 @@ body {
 .address-box {
     max-width: 85vw;        /* ширина не более 85% экрана */
     padding: 12px;
-    border: 2px dashed #bac1b1;
-    border-radius: 6px;
+    border: 2px dashed #6ab2f2;
+    border-radius: 4px;
     word-wrap: break-word;  /* перенос длинных строк */
     margin-top: 15px;
     text-align: center;
@@ -156,7 +156,7 @@ body {
     background: #010101; /* синий активный */
 }
     #currency {
-    width: 25vw;
+    width: 85vw;
     padding: 12px;
     font-size: 14px;
     border-radius: 6px;
@@ -248,7 +248,7 @@ body {
 
     <div style="color:#6ab2f2">  Стоимость выпуска карты : <b id="price_usdt"></b> USD </div>
 
-    <label>Доступные валюты для оплаты:</label>
+    <label><img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Symbols/Currency%20Exchange.webp?raw=true" style="width:20px;">Доступные валюты для оплаты:</label>
     <select id="currency">
         <option value="USDT_TRC20">USDT TRC-20</option>
         <option value="USDT_ERC20">USDT ERC-20</option>
@@ -259,7 +259,7 @@ body {
         <option value="LTC">LTC</option>
     </select>
 
-    <p><img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Money%20With%20Wings.webp?raw=true" style="width:20px;">К оплате: <b id="converted_amount">...</b></p>
+    <p>Сумма в выбранной валюте: <b id="converted_amount">...</b></p>
 
     <div class="address-box" id="copy_address">
        <b id="wallet_address">...</b>
