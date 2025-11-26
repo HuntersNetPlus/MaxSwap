@@ -82,6 +82,47 @@ body {
 
 
 
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    color: #0088ff; /* цвет знака ? */
+    font-weight: bold;
+}
+
+.tooltiptext {
+    visibility: hidden;
+    width: 220px;
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    padding: 8px;
+    border-radius: 6px;
+
+    position: absolute;
+    z-index: 10;
+    top: -5px;      /* смещение сверху */
+    left: 110%;     /* смещение справа от ? */
+    
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip.show .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+
+
+
+
+    
+
+
+
+
 
 
 .qr-glow-wrapper {
@@ -349,7 +390,18 @@ body {
     </select>
 
     <div style="color:#6ab2f2"><p><b>Сумма в выбранной валюте:</b> <b id="converted_amount">...</b></p> </div>
-    <b>Статус заявки:</b> ожидает оплаты (?)
+    
+
+<p>
+  Статус: ожидание 
+  <span class="tooltip">?
+    <span class="tooltiptext">
+      Карта будет выпущена автоматически после получения 2 подтверждений сети.
+    </span>
+  </span>
+</p>
+
+    
     <div class="address-box" id="copy_address">
        <b id="wallet_address">...</b>
     </div>
@@ -536,7 +588,21 @@ setInterval(nextSlide, 3000); // каждые 3 секунды
 
 
 
+document.querySelectorAll('.tooltip').forEach(t => {
+    t.addEventListener('click', function(e) {
+        // переключаем видимость при клике
+        this.classList.toggle('show');
+    });
+});
 
+// Чтобы клик вне tooltip закрывал подсказку
+document.addEventListener('click', function(e) {
+    document.querySelectorAll('.tooltip').forEach(t => {
+        if (!t.contains(e.target)) {
+            t.classList.remove('show');
+        }
+    });
+});
 
 
 
