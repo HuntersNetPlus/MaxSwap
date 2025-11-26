@@ -346,7 +346,7 @@ body {
     </div>
 
         <!-- QR-код появится здесь -->
-
+<br>
 
     <div class="qr-glow-wrapper">
     <div class="qr-rays"></div>
@@ -354,7 +354,7 @@ body {
     <div id="qrcode"><canvas style="mix-blend-mode: screen;"></canvas></div>
 </div>
     
-        
+        <br><br>
      
     <br>
 </div>
@@ -408,8 +408,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (wallets[cur]) {
             new QRCode(qEl, {
                 text: wallets[cur],
-                width: 250,
-                height: 250
+                width: 200,
+                height: 200
             });
         }
 
