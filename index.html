@@ -99,12 +99,12 @@ body {
     padding: 8px;
     border-radius: 6px;
 
-    position: fixed;
-    top: 120%; /* чуть ниже знака ? */
-    left: 50%;  /* центр относительно родителя */
+    position: fixed; /* фиксированное позиционирование относительно окна */
+    top: 150px;      /* отступ сверху (можно менять под нужное место) */
+    left: 50%;       /* центр по горизонтали */
     transform: translateX(-50%);
 
-    z-index: 10;
+    z-index: 9999;
     opacity: 0;
     transition: opacity 0.3s;
 }
@@ -113,7 +113,6 @@ body {
     visibility: visible;
     opacity: 1;
 }
-
 
 
 
