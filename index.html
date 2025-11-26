@@ -86,23 +86,25 @@ body {
     position: relative;
     display: inline-block;
     cursor: pointer;
-    color: #6ab2f2; /* цвет знака ? */
-    }
+    color: #0088ff;
+    font-weight: bold;
+}
 
 .tooltiptext {
     visibility: hidden;
-    width: 220px;
-    background-color: #253648;
+    width: 250px;
+    background-color: #333;
     color: #fff;
     text-align: left;
     padding: 8px;
-    border-radius: 4px;
+    border-radius: 6px;
 
     position: absolute;
+    top: 120%; /* чуть ниже знака ? */
+    left: 50%;  /* центр относительно родителя */
+    transform: translateX(-50%);
+
     z-index: 10;
-    top: -5px;      /* смещение сверху */
-    left: 110%;     /* смещение справа от ? */
-    
     opacity: 0;
     transition: opacity 0.3s;
 }
@@ -589,12 +591,10 @@ setInterval(nextSlide, 3000); // каждые 3 секунды
 
 document.querySelectorAll('.tooltip').forEach(t => {
     t.addEventListener('click', function(e) {
-        // переключаем видимость при клике
         this.classList.toggle('show');
     });
 });
 
-// Чтобы клик вне tooltip закрывал подсказку
 document.addEventListener('click', function(e) {
     document.querySelectorAll('.tooltip').forEach(t => {
         if (!t.contains(e.target)) {
