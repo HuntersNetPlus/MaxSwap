@@ -323,6 +323,11 @@ body {
     </div>
 </div>
 
+    <div id="promo-block" style="margin-top: 25px; text-align:center;">
+    <input type="text" id="promo_code" placeholder="Введите промокод" style="padding:10px; width:70%; font-size:16px; border-radius:8px; border:1px solid #ccc;">
+    <button id="apply_promo" class="button" style="margin-top:10px; width:50%;">Применить</button>
+</div>
+
 <!-- SCREEN 3 -->
 <div id="payment" class="screen">
     <h2 id="pay_title">Выпуск Max Swap Карты </h2>
@@ -586,6 +591,44 @@ for (let i = 0; i < 20; i++) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+    const originalPrices = {}; // чтобы сохранить исходные цены
+
+// Сохраняем изначальные цены
+document.querySelectorAll('#choose .option').forEach(opt => {
+    originalPrices[opt.dataset.name] = parseFloat(opt.dataset.price);
+});
+
+// Обработчик кнопки применения промокода
+document.getElementById('apply_promo').addEventListener('click', () => {
+    const code = document.getElementById('promo_code').value.trim();
+
+    if (code !== "") { // можно добавить проверку на конкретный код
+        document.querySelectorAll('#choose .option').forEach(opt => {
+            const name = opt.dataset.name;
+            const discounted = (originalPrices[name] / 2).toFixed(2);
+            opt.dataset.price = discounted;
+            // обновляем текст на кнопке
+            const textNode = opt.querySelector('div');
+            const descNode = textNode.querySelector('.desc').innerText;
+            textNode.innerHTML = `${name} - ${discounted} USDT<div class="desc">${descNode}</div>`;
+        });
+        alert("Промокод применён! Цены уменьшены вдвое.");
+    } else {
+        alert("Введите промокод.");
+    }
+});
 
 
 
