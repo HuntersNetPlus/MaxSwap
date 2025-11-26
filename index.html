@@ -19,7 +19,9 @@ body {
 .active { display: block; }
 
 
-
+#qrcode canvas {
+    mix-blend-mode: screen; /* или multiply */
+}
     
 
 #slideshow-container {
@@ -267,7 +269,9 @@ body {
     </div>
 
         <!-- QR-код появится здесь -->
-    <div id="qrcode" style="margin-top:20px;"></div>
+    <div id="qrcode" style="margin-top:20px;"> 
+    <canvas style="mix-blend-mode: screen;"></canvas>
+    </div>
         
     <div id="progress" class="progress-bar" aria-hidden="true"></div>
 
