@@ -767,7 +767,7 @@ promoBtn.addEventListener("click", () => {
     }
 
     if (VALID_PROMOS.includes(code)) {
-    const discount = (selected.price * 0.5).toFixed(2);
+    const discount = selected && selected.price ? (selected.price * 0.5).toFixed(2) : 0;
         // меняем текст над полем
         promoLabel.innerHTML = '<img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Activity/Party%20Popper.webp?raw=true" style="width:20px;vertical-align:middle;"> <b> Промокод успешно активирован!</b>';
         promoLabel.classList.add("gold-glow");
