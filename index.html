@@ -46,7 +46,7 @@ body {
 
 .tooltip-glass {
     position: fixed;
-    top: 45%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.8);
     width: 80%;
@@ -55,7 +55,7 @@ body {
     text-align: center;
 
     background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(14px);
+    backdrop-filter: blur(12px);
     border: 1px solid rgba(255,255,255,0.25);
     border-radius: 14px;
 
@@ -68,12 +68,13 @@ body {
     z-index: 99999;
 }
 
+/* видимый */
 .tooltip-glass.show {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
 }
 
-/* Контейнер для конфетти */
+/* конфетти */
 #confetti-container {
     position: fixed;
     inset: 0;
@@ -81,13 +82,11 @@ body {
     overflow: hidden;
     z-index: 99998;
 }
-
 .confetti-piece {
     position: absolute;
     border-radius: 3px;
     will-change: transform, opacity;
 }
-
 
 
 
@@ -596,7 +595,7 @@ body {
 </div>
 <!-- Конфети -->
 
-<!-- ПРОМОКОД — только на экране оплаты -->
+    <!-- ПРОМОКОД -->
 <div id="promo_section" style="margin-top:25px; text-align:center;">
 
     <input id="promo_input"
@@ -617,7 +616,9 @@ body {
 <div id="confetti-container"></div>
 
 <!-- ТУЛТИП -->
-<div id="promo_tooltip" class="tooltip-glass"></div>
+<div id="promo_tooltip" class="tooltip-glass">
+    На баланс будет начислена сумма, равная 50% от стоимости выбранной позиции.
+</div>
 
 
 
@@ -825,10 +826,8 @@ function applyPromo() {
         return;
     }
 
-    const bonus = (selected.price * 0.5).toFixed(2);
-
-    showPromoTooltip(bonus);
     makeConfetti();
+    showPromoTooltip();
 }
 
 
@@ -845,80 +844,48 @@ function applyPromo() {
 function makeConfetti() {
     const container = document.getElementById("confetti-container");
 
-    for (let i = 0; i < 160; i++) {
+    for (let i = 0; i < 150; i++) {
         const p = document.createElement("div");
         p.className = "confetti-piece";
 
-        // случайный размер
-        const size = 2 + Math.random() * 3;
-        p.style.width = size + "px";
-        p.style.height = size + "px";
+        // старт из центра экрана
+        p.style.left = "50%";
+        p.style.top = "50%";
+
+        p.style.width = p.style.height = (3 + Math.random() * 3) + "px";
         p.style.background = randomColor();
-
-        // старт из ЛЮБОЙ границы
-        const side = Math.floor(Math.random() * 4);
-
-        if (side === 0) { // сверху
-            p.style.left = Math.random() * window.innerWidth + "px";
-            p.style.top = "-10px";
-        }
-        if (side === 1) { // снизу
-            p.style.left = Math.random() * window.innerWidth + "px";
-            p.style.top = window.innerHeight + "px";
-        }
-        if (side === 2) { // слева
-            p.style.left = "-10px";
-            p.style.top = Math.random() * window.innerHeight + "px";
-        }
-        if (side === 3) { // справа
-            p.style.left = window.innerWidth + "px";
-            p.style.top = Math.random() * window.innerHeight + "px";
-        }
 
         container.appendChild(p);
 
-        animateConfettiToCenter(p);
+        animateConfetti(p);
     }
 }
 
 function randomColor() {
-    const arr = ["#ffd93d", "#ff6b6b", "#6bcdfd", "#8aff8a", "#ffadf6"];
+    const arr = ["#ff4757", "#ffa502", "#2ed573", "#1e90ff", "#ff6b81", "#eccc68"];
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function animateConfettiToCenter(elem) {
-    const duration = 1200 + Math.random() * 1500;
+function animateConfetti(elem) {
+    const duration = 1200 + Math.random() * 1200;
 
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-
-    const startX = elem.offsetLeft;
-    const startY = elem.offsetTop;
-
-    const dx = centerX - startX;
-    const dy = centerY - startY;
+    const dx = (Math.random() - 0.5) * window.innerWidth;
+    const dy = (Math.random() - 0.5) * window.innerHeight;
 
     elem.animate([
         { transform: "translate(0,0)", opacity: 1 },
         { transform: `translate(${dx}px, ${dy}px) rotate(720deg)`, opacity: 0 }
     ], {
         duration: duration,
-        easing: "cubic-bezier(0.18,0.45,0.3,1)"
+        easing: "cubic-bezier(0.15, 0.45, 0.3, 1)"
     });
 
     setTimeout(() => elem.remove(), duration);
 }
 
 
-
-
-
-
-    
-
-   function showPromoTooltip(amount) {
+    function showPromoTooltip() {
     const t = document.getElementById("promo_tooltip");
-    t.innerHTML = `Будет начислено: <b>${amount} USDT</b>`;
 
     t.classList.add("show");
 
