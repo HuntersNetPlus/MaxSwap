@@ -91,7 +91,78 @@ body {
 
 
 
+/* Input */
+#promo_input {
+    padding: 12px;
+    font-size: 18px;
+    width: 260px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    text-align: center;
+}
+#promo_btn {
+    margin-top: 10px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    background: #4ea7ff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
 
+/* SLIDER */
+#slider_wrapper {
+    width: 300px;
+    height: 60px;
+    background: #222;
+    border-radius: 40px;
+    margin: 30px auto 0;
+    position: relative;
+    display: none; /* скрыт до ввода промо */
+    border: 2px solid #444;
+}
+
+#slider_text {
+    position: absolute;
+    width: 100%;
+    top: 17px;
+    left: 0;
+    color: #999;
+    pointer-events: none;
+    font-size: 16px;
+}
+
+#slider_knob {
+    width: 60px;
+    height: 60px;
+    background: #4ea7ff;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: grab;
+    touch-action: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    user-select: none;
+}
+
+/* Confetti pieces */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: red;
+    top: 0;
+    left: 50%;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+}
 
 
 
@@ -484,7 +555,19 @@ body {
     <div id="qrcode"><canvas style="mix-blend-mode: screen;"></canvas></div>
 </div>
     
-        <br><br>
+        <div>
+    <h2>Введите промокод</h2>
+
+    <input id="promo_input" placeholder="Промокод">
+    <br>
+    <button id="promo_btn">Проверить</button>
+</div>
+
+<!-- SLIDER -->
+<div id="slider_wrapper">
+    <div id="slider_text">Проведите, чтобы подтвердить</div>
+    <div id="slider_knob">➡️</div>
+</div>
      
     <br>
 </div>
@@ -678,7 +761,104 @@ document.querySelectorAll('.tooltip').forEach(t => {
 
 
 
+const validCodes = ["MAX50", "WELCOME", "BONUS100"];
 
+document.getElementById("promo_btn").onclick = () => {
+    const code = document.getElementById("promo_input").value.trim().toUpperCase();
+    if (validCodes.includes(code)) {
+        document.getElementById("slider_wrapper").style.display = "block";
+    } else {
+        alert("❌ Неверный промокод");
+    }
+};
+
+/* SLIDER DRAG */
+const knob = document.getElementById("slider_knob");
+const wrap = document.getElementById("slider_wrapper");
+
+let dragging = false;
+let startX = 0;
+let offsetX = 0;
+
+function startDrag(e) {
+    dragging = true;
+    startX = e.touches ? e.touches[0].clientX : e.clientX;
+    offsetX = knob.offsetLeft;
+}
+
+function doDrag(e) {
+    if (!dragging) return;
+
+    const x = e.touches ? e.touches[0].clientX : e.clientX;
+    const dx = x - startX;
+
+    let newLeft = offsetX + dx;
+    const maxRight = wrap.clientWidth - knob.clientWidth;
+
+    if (newLeft < 0) newLeft = 0;
+    if (newLeft > maxRight) newLeft = maxRight;
+
+    knob.style.left = newLeft + "px";
+
+    if (newLeft >= maxRight) {
+        dragging = false;
+        knob.style.left = maxRight + "px";
+        launchConfetti();
+    }
+}
+
+function endDrag() {
+    if (!dragging) return;
+    dragging = false;
+
+    const maxRight = wrap.clientWidth - knob.clientWidth;
+    if (knob.offsetLeft < maxRight) {
+        knob.style.transition = "0.3s";
+        knob.style.left = "0px";
+        setTimeout(() => knob.style.transition = "", 300);
+    }
+}
+
+knob.addEventListener("mousedown", startDrag);
+knob.addEventListener("touchstart", startDrag);
+
+document.addEventListener("mousemove", doDrag);
+document.addEventListener("touchmove", doDrag);
+
+document.addEventListener("mouseup", endDrag);
+document.addEventListener("touchend", endDrag);
+
+/* CONFETTI EFFECT */
+function launchConfetti() {
+    for (let i = 0; i < 150; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        document.body.appendChild(c);
+
+        const size = Math.random() * 8 + 4;
+        c.style.width = size + "px";
+        c.style.height = size + "px";
+
+        c.style.background = ["#ff4757","#ffa502","#2ed573","#1e90ff","#ff6b81","#eccc68"]
+            [Math.floor(Math.random()*6)];
+
+        const startX = window.innerWidth / 2;
+        const startY = 0;
+
+        const endX = startX + (Math.random() - 0.5) * 600;
+        const endY = window.innerHeight + 200;
+
+        c.animate([
+            { transform: `translate(${startX}px, -20px)`, opacity: 1 },
+            { transform: `translate(${endX}px, ${endY}px) rotate(720deg)`, opacity: 0 }
+        ], {
+            duration: 1200 + Math.random() * 1000,
+            easing: "cubic-bezier(0.25,0.46,0.45,1)"
+        });
+
+        setTimeout(() => c.remove(), 2300);
+    }
+}
 
 
 
