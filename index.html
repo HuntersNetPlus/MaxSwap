@@ -9,9 +9,6 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     background: #17212b;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-    color: white;
 }
 .screen {
     display: none;
@@ -21,14 +18,28 @@ body {
 }
 .active { display: block; }
 
-#qrcode canvas { mix-blend-mode: screen; }
-
-#slideshow-container{
-    position: relative;
-    width: 80vw; max-width:400px;
-    height: 60vw; max-height:300px;
-    margin:20px auto;
+    #pay_title {
+  display: none;
 }
+
+#qrcode canvas {
+    mix-blend-mode: screen; /* или multiply */
+}
+    
+
+#slideshow-container {
+    position: relative;
+    width: 80vw;
+    max-width: 400px;
+    height: 60vw;
+    max-height: 300px;
+    margin: 20px auto;
+}
+
+
+
+
+
 
 /* слайдер/промо (единый блок) */
 #promo_block {
@@ -117,113 +128,448 @@ body {
   border-radius:2px;
 }
 
-/* остальные стили (как были) */
-.slide { position: absolute; top:50%; left:50%; width:100%; height:100%; object-fit:contain; border-radius:12px; transform:translate(-50%,-50%) scale(.9); opacity:0; transition:opacity .15s, transform .15s; }
-.slide.active { opacity:1; transform:translate(-50%,-50%) scale(1); }
-.button { width:75vw; margin:20px auto 0; padding:15px; font-size:18px; text-align:center; background:#2f6ea5; color:#fff; border:none; border-radius:6px; display:block; }
 
-.option { background:#253648; padding:12px; border-radius:12px; margin-top:15px; display:flex; gap:12px; align-items:center; cursor:pointer; }
-.option img { width:50px; height:50px; border-radius:8px; }
-.desc { font-size:13px; margin-top:4px; color:white; }
 
-#loader { position: fixed; top:0; left:0; width:100%; height:100%; background:#17212b; display:none; color:white; justify-content:center; align-items:center; font-size:22px; }
 
-#payment { font-size:15px; flex-direction:column; align-items:center; text-align:center; color:white; }
-#payment.active { display:flex !important; flex-direction:column; align-items:center; text-align:center; }
 
-.address-box { max-width:75vw; padding:12px; border:2px dashed #6ab2f2; border-radius:4px; word-wrap:break-word; text-align:center; font-size:10px; cursor:pointer; background: transparent; }
+
+.glass-status-btn {
+    padding: 4px;                
+    /* Стеклянный эффект */
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 6px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    position: relative;
+    overflow: hidden; /* чтобы блик не вылазил */
+}
+
+/* Анимация блика (как в Telegram) */
+.glass-status-btn::after {
+    content: "";
+    position: absolute;
+    top: -150%;
+    left: -150%;
+    width: 300%;
+    height: 300%;
+
+    background: linear-gradient(
+        45deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.6) 25%,
+        rgba(255,255,255,0) 55%
+    );
+
+    transform: rotate(15deg);
+    animation: shine-move 3s linear infinite;
+    pointer-events: none;
+}
+
+/* Ключевые кадры анимации */
+@keyframes shine-move {
+    from { transform: translateX(-100%) rotate(15deg); }
+    to   { transform: translateX(100%) rotate(15deg); }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+.slide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* сохраняет пропорции */
+    border-radius: 12px;
+    transform: translate(-50%, -50%) scale(0.9); /* центрируем + уменьшаем */
+    opacity: 0;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    transform-origin: center center; /* масштабирование из центра */
+}
+
+.slide.active {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.slide.out {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.1);
+}
+
+
+    
+.button {
+    width: 75vw;
+    margin: 20px auto 0;
+    padding: 15px;
+    font-size: 18px;
+    text-align: center;
+    background: #2f6ea5;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    display: block;
+}
+
+
+
+
+
+
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    color: #fff;
+    
+}
+.tooltiptext {
+    visibility: hidden;
+    width: 250px;
+    padding: 10px;
+    border-radius: 6px;
+
+    /* Эффект стекла */
+    background: rgba(255, 255, 255, 0.15); /* прозрачность фона */
+    backdrop-filter: blur(10px);           /* размытие фона за тултипом */
+    -webkit-backdrop-filter: blur(10px);   /* для Safari */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+
+    position: fixed;
+    top: 55%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+
+    opacity: 0;
+    transition: opacity 0.7s, transform 0.7s;
+}
+
+.tooltip.show .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+    
+
+
+
+
+
+
+.qr-glow-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* --- КВАДРАТНОЕ ЗОЛОТОЕ СВЕЧЕНИЕ --- */
+.qr-border-glow {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    border-radius: 8px;
+    box-shadow: 0 0 25px 8px rgba(255, 200, 0, 0.9),
+                0 0 50px 15px rgba(255, 180, 0, 0.7);
+    animation: qrGlowPulse 2.8s ease-in-out infinite;
+    z-index: -2;
+}
+
+@keyframes qrGlowPulse {
+    0%   { box-shadow: 0 0 22px 7px rgba(255, 200, 0, 0.8), 0 0 40px 13px rgba(255, 180, 0, 0.6); }
+    50%  { box-shadow: 0 0 35px 12px rgba(255, 215, 0, 1),   0 0 65px 20px rgba(255, 190, 0, 0.9); }
+    100% { box-shadow: 0 0 22px 7px rgba(255, 200, 0, 0.8), 0 0 40px 13px rgba(255, 180, 0, 0.6); }
+}
+
+/* --- ЧАСТИЦЫ, ЛЕТЯЩИЕ ОТ КОНТУРА КВАДРАТА --- */
+
+.qr-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: visible;
+    z-index: -1;
+}
+
+/* Создаём 20 частиц */
+.qr-particles span {
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    background: radial-gradient(circle, gold, rgba(255,200,0,0));
+    border-radius: 50%;
+    animation: particleFly 3.2s linear infinite;
+    opacity: 0.9;
+}
+
+/* Генерация случайного старта */
+.qr-particles span:nth-child(odd) {
+    animation-duration: 4s;
+}
+
+/* Анимация вылета наружу */
+@keyframes particleFly {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(0.7);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--tx), var(--ty)) scale(1.4);
+    }
+}
+
+
+    
+
+    
+
+      
+.option {
+    background: #253648;
+    padding: 12px;
+    border-radius: 12px;
+    margin-top: 15px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    cursor: pointer;
+}
+.option img {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+}
+.desc {
+    font-size: 13px;
+    margin-top: 4px;
+    color: white;
+}
+
+#loader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #17212b;
+    display: none;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+}
+
+/* Центрирование контента на payment только когда экран активен */
+#payment {
+    /* не задаём display здесь — чтобы .screen{display:none} работал */
+    font-size: 15px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: white;
+    }
+#payment.active {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+#timer {
+    font-weight: bold;
+}
+.address-box {
+    max-width: 75vw;        /* ширина не более 85% экрана */
+    padding: 12px;
+    border: 2px dashed #6ab2f2;
+    border-radius: 4px;
+    word-wrap: break-word;  /* перенос длинных строк */
+    text-align: center;
+    font-size: 10px;
+    cursor: pointer; /* чтобы показывалось, что можно нажать */
+}
+.copied {
+    background: #6ab2f2;
+    border-color: #00aa00;
+    transition: 1s;
+}
+.progress-bar {
+    display: flex;
+    max-width: 50vw
+    justify-content: center;
+    gap: 4px;
+    margin: 10px 0;
+}
+.progress-segment {
+    width: 12px;
+    height: 20px;
+    background: #d0d0d0; /* серый неактивный */
+    border-radius: 2px;
+    transition: background 0.3s;
+}
+.progress-segment.active {
+    background: #010101; /* синий активный */
+}
+    #currency {
+    width: 70vw;
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    margin-bottom:10px;    
+    border: 1px solid #6ab2f2;
+    background: #253648;
+    color: #6ab2f2;
+    outline: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%236ab2f2" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+}
 </style>
 </head>
 <body>
 
+
+      
 <div id="loader"><img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Hourglass%20Not%20Done.webp?raw=true" style="width:200px;"></div>
+    
 
 <!-- SCREEN 1 -->
 <div id="welcome" class="screen active" style="text-align:center;">
-  <div style="width:100%; text-align:center;">
-    <br><br><br>
-    <div id="slideshow-container">
-      <img class="slide active" src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Shopping%20Bags.webp?raw=true">
-      <img class="slide" src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Purse.webp?raw=true">
-      <img class="slide" src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Shopping%20Cart.webp?raw=true">
-    </div>
-  </div>
 
-  <div style="text-align:center; color:white">
-    <div style="color:#6ab2f2"> <b>Откройте мир без границ с Max Swap!</b></div> <br>
-    Совершайте покупке в интернете... <p> <b>Быстро, анонимно и без скрытых комиссий.</b></p>
-  </div >
-  <button class="button" id="welcomeBtn"> Открыть Max Swap Карту </button>
+<div style="width:100%; text-align:center;">
+
+<br><br><br>
+
+<div id="slideshow-container">
+    <img class="slide active" src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Shopping%20Bags.webp?raw=true">
+    <img class="slide" src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Purse.webp?raw=true">
+    <img class="slide" src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Shopping%20Cart.webp?raw=true">
+</div>
+
+
+
+    
+</div>
+    
+    
+      <div  style="text-align:center; color:white">
+     <div style="color:#6ab2f2"> <b>Откройте мир без границ с Max Swap!</b></div> <br>
+        Совершайте покупке в интернете, оплачивайте подписки, храните и переводите средства в любой валюте! <p> <b>Быстро, анонимно и без скрытых комиссий.</b></p>
+</div >
+    <button class="button" id="welcomeBtn"> Открыть Max Swap Карту </button>
 </div>
 
 <!-- SCREEN 2 -->
 <div id="choose" class="screen">
-  <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Identification%20Card.webp?raw=true" style="width:200px; display:block; margin:0 auto;">
-  <div style="text-align:center; color:white; font-weight:bold;">Выберите тип карты для выпуска:</div>
-
-  <div class="option" data-name="Max Swap Online Card" data-price="52.5">
-    <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Laptop.webp?raw=true" alt="">
-    <div>
-      <div style="color:#6ab2f2"> Max Swap Online Card - 52.5 USDT</div>
-      <div class="desc">Подойдёт для покупок ...</div>
+      <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Identification%20Card.webp?raw=true" style="width:200px; display:block; margin:0 auto;">
+ 
+ <div  style="text-align:center; color:white; font-weight:bold;">
+    Выберите тип карты для выпуска:
+</div >
+      <div class="option" data-name="Max Swap Online Card" data-price="52.5">
+        <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Laptop.webp?raw=true" alt="">
+        <div>
+            <div style="color:#6ab2f2"> Max Swap Online Card - 52.5 USDT</div>
+            <div class="desc">Подойдёт для покупок в интернете, подписок, оплаты онлайн-сервисов (Netflix, ChatGPT, Spotify и тд.) </div>
+        </div>
     </div>
-  </div>
 
-  <div class="option" data-name="Max Swap NFC Card" data-price="52.5">
-    <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Shopping%20Cart.webp?raw=true" alt="">
-    <div>
-      <div style="color:#6ab2f2"> Max Swap NFC Card - 52.5 USDT</div>
-      <div class="desc">Подойдёт для привязки к GooglePay/ApplePay ...</div>
-    </div>
-  </div>
-
-  <div class="option" data-name="Max Swap Ultima" data-price="99">
-    <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Symbols/New%20Button.webp?raw=true" alt="">
-    <div>
-      <div style="color:#6ab2f2">Max Swap Ultima - 99 USDT</div>
-      <div class="desc">Комбинация двух предыдущих пунктов...</div>
-    </div>
-  </div>
+    <div class="option" data-name="Max Swap NFC Card" data-price="52.5">
+        <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Shopping%20Cart.webp?raw=true" alt="">
+        <div>
+           <div style="color:#6ab2f2">
+    Max Swap NFC Card - 52.5 USDT
 </div>
+            <div class="desc">Подойдёт для привязки к GooglePay/ApplePay и оплаты через NFC-терминалы.</div>
+        </div>
+    </div>
+
+    <div class="option" data-name="Max Swap Ultima" data-price="99">
+        <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Symbols/New%20Button.webp?raw=true" alt="">
+        <div>
+            <div style="color:#6ab2f2">
+                Max Swap Ultima - 99 USDT
+                </div>
+            <div class="desc">Комбинация двух предыдущих пунктов. Карта подойдёт для любых целей.</div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    
 
 <!-- SCREEN 3 -->
 <div id="payment" class="screen">
-  <h2 id="pay_title" style="display:none">Выпуск Max Swap Карты </h2>
-  <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Money%20Bag.webp?raw=true" style="width:200px;">
-  <div style="color:#6ab2f2; width:80%; margin:0 auto; text-align:center; margin-bottom:7px">
-    <b>Стоимость выпуска карты: <b id="price_usdt"></b> USD</b>
+    <h2 id="pay_title">Выпуск Max Swap Карты </h2>
+    <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Money%20Bag.webp?raw=true" style="width:200px;">
+    <div style="color:#6ab2f2; width:80%; margin:0 auto; text-align:center; margin-bottom:7px">
+  <b>Стоимость выпуска карты: <b id="price_usdt"></b> USD</b>
+</div>
+    <div style=" margin-bottom:7px"> <label>Выберите криптовалюту для оплаты:</label></div>
+    <select id="currency">
+        <option value="USDT_TRC20">USDT TRC-20</option>
+        <option value="USDT_ERC20">USDT ERC-20</option>
+        <option value="USDC">USDC ERC-20</option>
+        <option value="USDT_SOL">USDT SOL</option>
+        <option value="BTC">BTC</option>
+        <option value="ETH">ETH</option>
+        <option value="LTC">LTC</option>
+    </select>
+
+    <div style="color:#6ab2f2; margin-bottom:7px"> <b>Сумма в этой валюте:</b> <b id="converted_amount">...</b></div>
+   
+  <div style="margin-bottom:7px"><span class="tooltip"> <div class="glass-status-btn"><img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Magnifying%20Glass%20Tilted%20Right.webp?raw=true" style="width:20px; vertical-align:middle"> Статус: ожидание оплаты [?] </div>
+    <span class="tooltiptext">
+        <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Money%20With%20Wings.webp?raw=true" style="width:70px;"> <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Symbols/Currency%20Exchange.webp?raw=true" style="width:70px;"> <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Identification%20Card.webp?raw=true" style="width:70px;"><br>
+      Карта будет активирована автоматически когда транзакция получит как минимум 4 подтверждения сети.
+    </span>
+  </span>
   </div>
+  
 
-  <div style=" margin-bottom:7px"> <label>Выберите криптовалюту для оплаты:</label></div>
-  <select id="currency">
-    <option value="USDT_TRC20">USDT TRC-20</option>
-    <option value="USDT_ERC20">USDT ERC-20</option>
-    <option value="USDC">USDC ERC-20</option>
-    <option value="USDT_SOL">USDT SOL</option>
-    <option value="BTC">BTC</option>
-    <option value="ETH">ETH</option>
-    <option value="LTC">LTC</option>
-  </select>
-
-  <div style="color:#6ab2f2; margin-bottom:7px"> <b>Сумма в этой валюте:</b> <b id="converted_amount">...</b></div>
-
-  <div style="margin-bottom:7px">
-    <div class="glass-status-btn" style="display:inline-block; padding:6px 10px;">
-      <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Magnifying%20Glass%20Tilted%20Right.webp?raw=true" style="width:20px; vertical-align:middle">
-      Статус: ожидание оплаты [?]
+        
+    <div class="address-box" id="copy_address">
+       <b id="wallet_address">...</b>
     </div>
-  </div>
 
-  <div class="address-box" id="copy_address">
-    <b id="wallet_address">...</b>
-  </div>
+        <!-- QR-код появится здесь -->
+<br>
 
-  <br>
-  <div class="qr-glow-wrapper">
+    <div class="qr-glow-wrapper">
+    <div class="qr-rays"></div>
+    <div class="qr-particles"></div>
     <div id="qrcode"><canvas style="mix-blend-mode: screen;"></canvas></div>
-  </div>
-
-  <!-- PROMO + SLIDER — ЕДИНСТВЕННЫЙ БЛОК -->
+</div>
+    
+        <!-- PROMO + SLIDER — ЕДИНСТВЕННЫЙ БЛОК -->
   <div id="promo_block">
     <div style="margin-top:18px;">
       <input id="promo_input" placeholder="Введите промокод" autocomplete="off" autocapitalize="characters" />
@@ -235,103 +581,214 @@ body {
     </div>
   </div>
 
-</div>
 
-<!-- конфетти контейнер -->
+
+    <!-- конфетти контейнер -->
 <div id="confetti-container"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+
+    
+     
+    <br>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-/* ---------- настройки ---------- */
-const VALID = ["MAX50","WELCOME","BONUS100","TESTCODE"]; // список промокодов (UPPERCASE)
-const SLIDE_COMPLETE_THRESHOLD = 0.92; // порог достижения конца (0..1)
-/* -------------------------------- */
-
 document.addEventListener('DOMContentLoaded', () => {
+    const screens = {
+        welcome: document.getElementById('welcome'),
+        choose: document.getElementById('choose'),
+        payment: document.getElementById('payment')
+    };
+    const loader = document.getElementById('loader');
+    let selected = { name: null, price: 0 };
 
-  // --- SCREENS / UI ---
-  const screens = {
-    welcome: document.getElementById('welcome'),
-    choose: document.getElementById('choose'),
-    payment: document.getElementById('payment')
-  };
-  const loader = document.getElementById('loader');
-  let selected = { name: null, price: 0 };
+    const wallets = {
+        USDT_TRC20: "TVis1d6QARhWBQ6XZmisD2oSWGnqFM2qzX",
+        USDT_ERC20: "0xaacE295640C15344C6a2DC934a3AACcD4e23cc20",
+        USDT_SOL: "AVQJ4s1Y9BrtEmnH5WrxPT818YibUJsaR4uU6Aiht647",
+        BTC: "bc1qrhqsqsds47hycq0zkpx8fdvwfyu0hey843lz6j",
+        ETH: "0xaacE295640C15344C6a2DC934a3AACcD4e23cc20",
+        LTC: "LS2Pg4V8AhaQ1FRweGUHfkBxtwFAbJ6Dpy",
+        USDC: "0xaacE295640C15344C6a2DC934a3AACcD4e23cc20"
+    };
 
-  const wallets = {
-    USDT_TRC20: "TVis1d6QARhWBQ6XZmisD2oSWGnqFM2qzX",
-    USDT_ERC20: "0xaacE295640C15344C6a2DC934a3AACcD4e23cc20",
-    USDT_SOL: "AVQJ4s1Y9BrtEmnH5WrxPT818YibUJsaR4uU6Aiht647",
-    BTC: "bc1qrhqsqsds47hycq0zkpx8fdvwfyu0hey843lz6j",
-    ETH: "0xaacE295640C15344C6a2DC934a3AACcD4e23cc20",
-    LTC: "LS2Pg4V8AhaQ1FRweGUHfkBxtwFAbJ6Dpy",
-    USDC: "0xaacE295640C15344C6a2DC934a3AACcD4e23cc20"
-  };
-
-  function openScreen(id) {
-    Object.values(screens).forEach(s => s.classList.remove('active'));
-    loader.style.display = 'flex';
-    setTimeout(() => {
-      loader.style.display = 'none';
-      screens[id].classList.add('active');
-    }, 300);
-  }
-
-  function selectOption(name, price) {
-    selected = { name, price };
-    document.getElementById('pay_title').innerText = name;
-    document.getElementById('price_usdt').innerText = price;
-    openScreen('payment');
-    setTimeout(updateConversion, 300);
-  }
-
-  async function updateConversion() {
-    const cur = document.getElementById("currency").value;
-    const qEl = document.getElementById('qrcode');
-    qEl.innerHTML = "";
-    if (wallets[cur]) {
-      new QRCode(qEl, { text: wallets[cur], width: 250, height: 250 });
+    function openScreen(id) {
+        Object.values(screens).forEach(s => s.classList.remove('active'));
+        loader.style.display = 'flex';
+        setTimeout(() => {
+            loader.style.display = 'none';
+            screens[id].classList.add('active');
+        }, 900);
     }
-    document.getElementById('wallet_address').innerText = wallets[cur] || '—';
-    if (cur.startsWith("USDT")) {
-      document.getElementById('converted_amount').innerText = `${selected.price} USDT`;
-      return;
-    }
-    try {
-      const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,litecoin,usd-coin&vs_currencies=usd");
-      const data = await res.json();
-      const priceCryptoUSD = {
-        BTC: data.bitcoin?.usd || null,
-        ETH: data.ethereum?.usd || null,
-        LTC: data.litecoin?.usd || null,
-        USDC: data["usd-coin"]?.usd || null
-      };
-      const rate = priceCryptoUSD[cur];
-      if (!rate) { document.getElementById('converted_amount').innerText = "Курс недоступен"; return; }
-      const converted = (selected.price / rate).toFixed(6);
-      document.getElementById('converted_amount').innerText = `${converted} ${cur}`;
-    } catch (e) {
-      console.warn(e);
-      document.getElementById('converted_amount').innerText = "Ошибка загрузки курса";
-    }
-  }
 
-  // handlers
-  document.getElementById('welcomeBtn').addEventListener('click', () => openScreen('choose'));
-  document.querySelectorAll('#choose .option').forEach(opt => {
-    opt.addEventListener('click', () => selectOption(opt.dataset.name, parseFloat(opt.dataset.price)));
-  });
-  document.getElementById('currency').addEventListener('change', updateConversion);
-  document.getElementById('copy_address').addEventListener('click', function() {
-    const text = document.getElementById('wallet_address').innerText;
-    if (!text || text === '—') return;
-    navigator.clipboard.writeText(text).then(() => {
-      this.classList.add("copied");
-      setTimeout(() => this.classList.remove("copied"), 1500);
-    }).catch(()=>{});
-  });
+    function selectOption(name, price) {
+        selected = { name, price };
+        document.getElementById('pay_title').innerText = name;
+        document.getElementById('price_usdt').innerText = price;
+        openScreen('payment');
+        setTimeout(updateConversion, 500);
+    }
 
-  // --- SLIDER & PROMO logic ---
+    async function updateConversion() {
+        const cur = document.getElementById("currency").value;
+
+        // Очистка предыдущего QR-кода
+        const qEl = document.getElementById('qrcode');
+        qEl.innerHTML = "";
+
+        // Генерация нового QR-кода (адреса)
+        if (wallets[cur]) {
+            new QRCode(qEl, {
+                text: wallets[cur],
+                width: 250,
+                height: 250
+            });
+        }
+
+        // show address immediately
+        document.getElementById('wallet_address').innerText = wallets[cur] || '—';
+
+        if (cur.startsWith("USDT")) {
+            document.getElementById('converted_amount').innerText = `${selected.price} USDT`;
+            return;
+        }
+
+        try {
+            const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,litecoin,usd-coin&vs_currencies=usd");
+            const data = await res.json();
+            const priceCryptoUSD = {
+                BTC: data.bitcoin?.usd || null,
+                ETH: data.ethereum?.usd || null,
+                LTC: data.litecoin?.usd || null,
+                USDC: data["usd-coin"]?.usd || null
+            };
+
+            const rate = priceCryptoUSD[cur];
+            if (!rate) {
+                document.getElementById('converted_amount').innerText = "Курс недоступен";
+                return;
+            }
+
+            const converted = (selected.price / rate).toFixed(6);
+            document.getElementById('converted_amount').innerText = `${converted} ${cur}`;
+        } catch (e) {
+            console.warn(e);
+            document.getElementById('converted_amount').innerText = "Ошибка загрузки курса";
+        }
+    }
+
+    // кнопка открытия
+    document.getElementById('welcomeBtn').addEventListener('click', () => openScreen('choose'));
+
+    // выбор опции
+    document.querySelectorAll('#choose .option').forEach(opt => {
+        opt.addEventListener('click', () => selectOption(opt.dataset.name, parseFloat(opt.dataset.price)));
+    });
+
+    // смена валюты
+    document.getElementById('currency').addEventListener('change', updateConversion);
+
+    // копирование адреса
+    document.getElementById('copy_address').addEventListener('click', function() {
+        const text = document.getElementById('wallet_address').innerText;
+        if (!text || text === '—') return;
+        navigator.clipboard.writeText(text).then(() => {
+            this.classList.add("copied");
+            setTimeout(() => this.classList.remove("copied"), 2000);
+        }).catch(()=>{ /* ignore */ });
+    });
+
+    // прогрессбар + синхронизованный таймер
+    const progressBar = document.getElementById("progress");
+    // создаём 15 сегментов (один раз)
+    for (let i = 0; i < 15; i++) {
+        let seg = document.createElement("div");
+        seg.classList.add("progress-segment");
+        progressBar.appendChild(seg);
+    }
+
+    let timerValue = 15;
+    // единый интервал
+    setInterval(() => {
+        timerValue--;
+        if (timerValue < 0) timerValue = 15;
+        document.getElementById("timer").innerText = timerValue;
+
+        const segments = document.querySelectorAll(".progress-segment");
+        // (15 - timerValue) активных сегментов
+        const activeCount = 15 - timerValue;
+        segments.forEach((s, i) => {
+            s.classList.toggle("active", i < activeCount);
+        });
+    }, 1000);
+
+});
+
+
+
+    
+const slides = document.querySelectorAll(".slide");
+let index = 0;
+const total = slides.length;
+
+function nextSlide() {
+    const current = slides[index];
+    current.classList.remove("active");
+    current.classList.add("out");
+
+    index = (index + 1) % total;
+    const next = slides[index];
+    next.classList.remove("out");
+    next.classList.add("active");
+}
+
+setInterval(nextSlide, 3000); // каждые 3 секунды
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.querySelectorAll('.tooltip').forEach(t => {
+    t.addEventListener('click', function(e) {
+        const tooltipText = this.querySelector('.tooltiptext');
+
+        // Показ тултипа
+        this.classList.add('show');
+
+        // Автозакрытие через 3 секунды
+        setTimeout(() => {
+            this.classList.remove('show');
+        }, 9000); // 9000 мс = 3 сек
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+// --- SLIDER & PROMO logic ---
   const input = document.getElementById('promo_input');
   const sliderWrapper = document.getElementById('slider_wrapper');
   const knob = document.getElementById('slider_knob');
@@ -521,6 +978,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 }); // DOMContentLoaded end
 
+
+
+
+
+    
+    
+
+    
 </script>
+
 </body>
 </html>
