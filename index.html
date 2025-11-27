@@ -528,7 +528,7 @@ body {
     <div id="qrcode"><canvas style="mix-blend-mode: screen;"></canvas></div>
 </div>
     
-  <div id="promo_area" style="margin-top:20px; text-align:center;">
+  <div id="promo_area" style="margin-top:10px; text-align:center;">
 
     <div id="promo_label" 
          style="color:#6ab2f2; font-size:13px; margin-bottom:10px;">
@@ -548,6 +548,9 @@ body {
 <div id="confetti-container"
      style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; overflow:hidden;">
 </div>
+
+    <br>
+    <br>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -743,7 +746,6 @@ document.querySelectorAll('.tooltip').forEach(t => {
 //      ПРОМО + ТУЛТИП + КОНФЕТИ
 //------------------------------------------------------
 
-
 const VALID_PROMOS = ["FREE100", "SALE50", "MAX2025"]; // твой список
 
 const promoInput = document.getElementById("promo_input");
@@ -751,44 +753,60 @@ const promoBtn = document.getElementById("promo_btn");
 const promoLabel = document.getElementById("promo_label");
 const confettiContainer = document.getElementById("confetti-container");
 
+// обработка кнопки "Проверить"
 promoBtn.addEventListener("click", () => {
     const code = promoInput.value.trim().toUpperCase();
 
     if (!code) {
-        showGlassToast("Введите промокод");
+        showGlassToast(`
+            <div style="text-align:center;">
+                <img src="https://i.imgur.com/7fE3sXv.png" style="width:80px; margin-bottom:10px;">
+                <div>Введите промокод</div>
+            </div>
+        `);
         return;
     }
 
     if (VALID_PROMOS.includes(code)) {
         // меняем текст над полем
-        promoLabel.innerText = "🎫 Твой промокод активирован!";
+        promoLabel.innerText = "Промокод активирован!";
         promoLabel.classList.add("gold-glow");
 
-        // эффект
-        showGlassToast("🎉 Промокод принят!");
+        // тултип с картинкой
+        showGlassToast(`
+            <div style="text-align:center;">
+                <img src="https://i.imgur.com/4L7e1vq.png" style="width:80px; margin-bottom:10px;">
+                <div>🎉 Промокод принят!</div>
+            </div>
+        `);
+
         launchConfetti();
     } else {
         // возвращаем стандартный текст
         promoLabel.innerText = "Есть промокод? Введи его ниже!";
         promoLabel.classList.remove("gold-glow");
 
-        showGlassToast(" Неверный промокод");
+        showGlassToast(`
+            <div style="text-align:center;">
+                <img src="https://i.imgur.com/q9x5mXb.png" style="width:80px; margin-bottom:10px;">
+                <div>❌ Неверный промокод</div>
+            </div>
+        `);
     }
 });
 
-// стеклянный тултип
+// стеклянный тултип с поддержкой HTML
 let toast = null;
-
-function showGlassToast(text) {
+function showGlassToast(htmlContent) {
     if (toast) toast.remove();
 
     toast = document.createElement("div");
     toast.className = "tooltip-glass";
-    toast.innerHTML = text;
+    toast.innerHTML = htmlContent;
     document.body.appendChild(toast);
 
     function close() {
-        toast.remove();
+        if (toast) toast.remove();
         toast = null;
         document.removeEventListener("pointerdown", close);
     }
@@ -828,7 +846,6 @@ function launchConfetti() {
         setTimeout(() => c.remove(), 2000);
     }
 }
-
 
 
 
