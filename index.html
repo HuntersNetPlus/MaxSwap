@@ -760,8 +760,7 @@ promoBtn.addEventListener("click", () => {
     if (!code) {
         showGlassToast(`
             <div style="text-align:center;">
-                <img src="https://i.imgur.com/7fE3sXv.png" style="width:80px; margin-bottom:10px;">
-                <div><img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Pencil.webp?raw=true" style="width:70px;"><br>Введите промокод</div>
+               <div><img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Pencil.webp?raw=true" style="width:70px;"><br>Введите промокод</div>
             </div>
         `);
         return;
@@ -769,7 +768,7 @@ promoBtn.addEventListener("click", () => {
 
     if (VALID_PROMOS.includes(code)) {
         // меняем текст над полем
-        promoLabel.innerHTML = '<img src="img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Activity/Party%20Popper.webp?raw=true" style="width:20px;vertical-align:middle"> Твой промокод активирован!';
+        promoLabel.innerHTML = '<img src="img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Activity/Party%20Popper.webp?raw=true" style="width:20px;vertical-align:middle;"> Твой промокод активирован!';
         promoLabel.classList.add("gold-glow");
 
         // тултип с картинкой
@@ -783,7 +782,7 @@ promoBtn.addEventListener("click", () => {
         launchConfetti();
     } else {
         // возвращаем стандартный текст
-        promoLabel.innerText = "Есть промокод? Введи его ниже!";
+        promoLabel.innerHTML = '<img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Activity/Ticket.webp?raw=true" style="width:20px; vertical-align:middle"> <b>Есть промокод? Введи его ниже!</b>';
         promoLabel.classList.remove("gold-glow");
 
         showGlassToast(`
