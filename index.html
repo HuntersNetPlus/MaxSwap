@@ -787,17 +787,19 @@ promoBtn.addEventListener("click", () => {
         promoLabel.classList.remove("gold-glow");
 
         showGlassToast(`
-            <div style="text-align:center;">
-                <img src="https://i.imgur.com/q9x5mXb.png" style="width:80px; margin-bottom:10px;">
-                <div>❌ Неверный промокод</div>
-            </div>
-        `);
+    <div style="text-align:center;">
+        <img src="https://i.imgur.com/q9x5mXb.png" style="width:80px; margin-bottom:10px;">
+        <div>❌ Неверный промокод</div>
+    </div>
+`, 2000); // 2000 мс = 2 сек
+
     }
 });
 
 // стеклянный тултип с поддержкой HTML
+// стеклянный тултип с поддержкой HTML и авто-скрытием
 let toast = null;
-function showGlassToast(htmlContent) {
+function showGlassToast(htmlContent, duration = 0) {
     if (toast) toast.remove();
 
     toast = document.createElement("div");
@@ -809,11 +811,17 @@ function showGlassToast(htmlContent) {
         if (toast) toast.remove();
         toast = null;
         document.removeEventListener("pointerdown", close);
+        if (timeoutId) clearTimeout(timeoutId);
     }
 
-    setTimeout(() => {
-        document.addEventListener("pointerdown", close);
-    }, 30);
+    let timeoutId = null;
+    if (duration > 0) {
+        timeoutId = setTimeout(close, duration); // автоматически закрываем
+    } else {
+        setTimeout(() => {
+            document.addEventListener("pointerdown", close);
+        }, 30);
+    }
 }
 
 // конфетти
