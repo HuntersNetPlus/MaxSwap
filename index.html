@@ -767,7 +767,13 @@ promoBtn.addEventListener("click", () => {
     }
 
     if (VALID_PROMOS.includes(code)) {
-    const discount = selected && selected.price ? (selected.price * 0.5).toFixed(2) : 0;
+   const DISCOUNTS = {
+    "Max Swap Online Card": 22.5,
+    "Max Swap NFC Card": 22.5,
+    "Max Swap Ultima": 50
+};
+    const discount = DISCOUNTS[selected.name] || 0;
+        
         // меняем текст над полем
         promoLabel.innerHTML = '<img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Activity/Party%20Popper.webp?raw=true" style="width:20px;vertical-align:middle;"> <b> Промокод успешно активирован!</b>';
         promoLabel.classList.add("gold-glow");
