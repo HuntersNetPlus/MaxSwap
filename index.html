@@ -829,7 +829,21 @@ function applyPromo() {
 
 
 
+// --- ПРОМОКОД ---
+// обработчик кнопки
+document.getElementById("promo_btn").addEventListener("click", () => {
+    const code = document.getElementById("promo_input").value.trim();
 
+    if (code.toUpperCase() !== "MAX50") {
+        showPromoTooltip("❌ Неверный промокод");
+        return;
+    }
+
+    // 50% бонус от выбранной цены
+    const bonus = (selected.price * 0.5).toFixed(2);
+
+    showPromoTooltip(`🎉 Промокод активирован!<br>На баланс будет начислено: <b>${bonus} USDT</b>`);
+});
 
 
 
