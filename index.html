@@ -44,6 +44,64 @@ body {
 
 
 
+.tooltip-glass {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    width: 80%;
+    max-width: 320px;
+    padding: 20px;
+    text-align: center;
+
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 14px;
+
+    color: white;
+    font-size: 16px;
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s ease, transform .3s ease;
+    z-index: 99999;
+}
+
+/* видимый */
+.tooltip-glass.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* конфетти */
+#confetti-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 99998;
+}
+.confetti-piece {
+    position: absolute;
+    border-radius: 3px;
+    will-change: transform, opacity;
+}
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
 
 
 
@@ -537,8 +595,30 @@ body {
 </div>
 <!-- Конфети -->
 
-    <button class="confetti-btn" onclick="makeConfetti()">Проверить статус</button>
+    <!-- ПРОМОКОД -->
+<div id="promo_section" style="margin-top:25px; text-align:center;">
+
+    <input id="promo_input"
+           type="text"
+           placeholder="Введите промокод"
+           style="width:75%; padding:12px; border-radius:10px; border:1px solid #6ab2f2; 
+                  font-size:16px; text-align:center;">
+
+    <button id="promo_btn"
+            onclick="applyPromo()"
+            style="margin-top:12px; padding:12px 20px; background:#6ab2f2; color:white;
+                   font-size:16px; border:none; border-radius:10px; cursor:pointer;">
+        Применить промокод
+    </button>
+</div>
+
+<!-- КОНФЕТТИ -->
 <div id="confetti-container"></div>
+
+<!-- ТУЛТИП -->
+<div id="promo_tooltip" class="tooltip-glass">
+    На баланс будет начислена сумма, равная 50% от стоимости выбранной позиции.
+</div>
 
 
 
@@ -738,7 +818,17 @@ document.querySelectorAll('.tooltip').forEach(t => {
 
 
 
+function applyPromo() {
+    const input = document.getElementById("promo_input").value.trim().toUpperCase();
 
+    if (input !== "MAX50") {
+        alert("Неверный промокод");
+        return;
+    }
+
+    makeConfetti();
+    showPromoTooltip();
+}
 
 
 
@@ -755,26 +845,30 @@ function makeConfetti() {
     const container = document.getElementById("confetti-container");
 
     for (let i = 0; i < 150; i++) {
-        const particle = document.createElement("div");
-        particle.classList.add("confetti-piece");
+        const p = document.createElement("div");
+        p.className = "confetti-piece";
 
-        // Позиция — в районе центра экрана
-        particle.style.left = "50%";
-        particle.style.top = "50%";
+        // старт из центра экрана
+        p.style.left = "50%";
+        p.style.top = "50%";
 
-        particle.style.width = particle.style.height = (4 + Math.random() * 4) + "px";
-        particle.style.background = randomColor();
+        p.style.width = p.style.height = (3 + Math.random() * 3) + "px";
+        p.style.background = randomColor();
 
-        container.appendChild(particle);
+        container.appendChild(p);
 
-        animateConfetti(particle);
+        animateConfetti(p);
     }
+}
+
+function randomColor() {
+    const arr = ["#ff4757", "#ffa502", "#2ed573", "#1e90ff", "#ff6b81", "#eccc68"];
+    return arr[Math.floor(Math.random() * arr.length)];
 }
 
 function animateConfetti(elem) {
     const duration = 1200 + Math.random() * 1200;
 
-    // разлет по всей ширине
     const dx = (Math.random() - 0.5) * window.innerWidth;
     const dy = (Math.random() - 0.5) * window.innerHeight;
 
@@ -789,11 +883,16 @@ function animateConfetti(elem) {
     setTimeout(() => elem.remove(), duration);
 }
 
-function randomColor() {
-    const colors = ["#ff4757", "#ffa502", "#2ed573", "#1e90ff", "#ff6b81", "#eccc68"];
-    return colors[Math.floor(Math.random() * colors.length)];
-}
 
+    function showPromoTooltip() {
+    const t = document.getElementById("promo_tooltip");
+
+    t.classList.add("show");
+
+    setTimeout(() => {
+        t.classList.remove("show");
+    }, 3000);
+}
 
     
 
