@@ -759,6 +759,10 @@ const promoBtn = document.getElementById("promo_btn");
 const promoLabel = document.getElementById("promo_label");
 const confettiContainer = document.getElementById("confetti-container");
 
+
+    // пример выбранной карты (должно быть то же, что у тебя в selected)
+let selected = { name: "Max Swap Online Card", price: 52.5 };
+
 // обработка кнопки "Проверить"
 promoBtn.addEventListener("click", () => {
     const code = promoInput.value.trim().toUpperCase();
