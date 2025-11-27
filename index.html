@@ -91,25 +91,16 @@ body {
 
 
 
-/* Input */
+/* INPUT */
 #promo_input {
-    padding: 12px;
+    padding: 14px;
     font-size: 18px;
     width: 260px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: none;
     outline: none;
     text-align: center;
-}
-#promo_btn {
-    margin-top: 10px;
-    padding: 10px 18px;
-    border-radius: 8px;
-    border: none;
-    background: #4ea7ff;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
+    margin-bottom: 20px;
 }
 
 /* SLIDER */
@@ -118,10 +109,11 @@ body {
     height: 60px;
     background: #222;
     border-radius: 40px;
-    margin: 30px auto 0;
+    margin: 20px auto 0;
     position: relative;
-    display: none; /* скрыт до ввода промо */
+    display: none; /* появляется только при вводе */
     border: 2px solid #444;
+    overflow: hidden;
 }
 
 #slider_text {
@@ -129,7 +121,7 @@ body {
     width: 100%;
     top: 17px;
     left: 0;
-    color: #999;
+    color: #aaa;
     pointer-events: none;
     font-size: 16px;
 }
@@ -151,7 +143,7 @@ body {
     user-select: none;
 }
 
-/* Confetti pieces */
+/* CONFETTI */
 .confetti {
     position: fixed;
     width: 10px;
@@ -163,6 +155,27 @@ body {
     opacity: 0;
     pointer-events: none;
 }
+
+/* GLASS TOOLTIP */
+.tooltip-glass {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 18px 28px;
+    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 16px;
+    color: white;
+    font-size: 17px;
+    z-index: 99999;
+    opacity: 0;
+    animation: fadeIn .3s forwards;
+}
+
+@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+@keyframes fadeOut { from {opacity:1;} to {opacity:0;} }
 
 
 
@@ -563,11 +576,23 @@ body {
     <button id="promo_btn">Проверить</button>
 </div>
 
+
+
+
+    
+
+<input id="promo_input" placeholder="Промокод">
+
 <!-- SLIDER -->
 <div id="slider_wrapper">
     <div id="slider_text">Проведите, чтобы подтвердить</div>
     <div id="slider_knob">➡️</div>
 </div>
+
+
+
+
+    
      
     <br>
 </div>
@@ -763,19 +788,16 @@ document.querySelectorAll('.tooltip').forEach(t => {
 
 const validCodes = ["MAX50", "WELCOME", "BONUS100"];
 
-document.getElementById("promo_btn").onclick = () => {
-    const code = document.getElementById("promo_input").value.trim().toUpperCase();
-    if (validCodes.includes(code)) {
-        document.getElementById("slider_wrapper").style.display = "block";
-    } else {
-        alert("❌ Неверный промокод");
-    }
-};
-
-/* SLIDER DRAG */
+const input = document.getElementById("promo_input");
+const slider = document.getElementById("slider_wrapper");
 const knob = document.getElementById("slider_knob");
-const wrap = document.getElementById("slider_wrapper");
 
+/* ПОКАЗ СЛАЙДЕРА ПРИ ВВОДЕ */
+input.addEventListener("input", () => {
+    slider.style.display = input.value.length > 0 ? "block" : "none";
+});
+
+/* ЛОГИКА СЛАЙДЕРА */
 let dragging = false;
 let startX = 0;
 let offsetX = 0;
@@ -793,7 +815,7 @@ function doDrag(e) {
     const dx = x - startX;
 
     let newLeft = offsetX + dx;
-    const maxRight = wrap.clientWidth - knob.clientWidth;
+    const maxRight = slider.clientWidth - knob.clientWidth;
 
     if (newLeft < 0) newLeft = 0;
     if (newLeft > maxRight) newLeft = maxRight;
@@ -803,7 +825,7 @@ function doDrag(e) {
     if (newLeft >= maxRight) {
         dragging = false;
         knob.style.left = maxRight + "px";
-        launchConfetti();
+        checkPromo();
     }
 }
 
@@ -811,7 +833,8 @@ function endDrag() {
     if (!dragging) return;
     dragging = false;
 
-    const maxRight = wrap.clientWidth - knob.clientWidth;
+    const maxRight = slider.clientWidth - knob.clientWidth;
+
     if (knob.offsetLeft < maxRight) {
         knob.style.transition = "0.3s";
         knob.style.left = "0px";
@@ -819,6 +842,7 @@ function endDrag() {
     }
 }
 
+/* EVENTS */
 knob.addEventListener("mousedown", startDrag);
 knob.addEventListener("touchstart", startDrag);
 
@@ -828,7 +852,40 @@ document.addEventListener("touchmove", doDrag);
 document.addEventListener("mouseup", endDrag);
 document.addEventListener("touchend", endDrag);
 
-/* CONFETTI EFFECT */
+/* ПРОВЕРКА ПРОМОКОДА */
+function checkPromo() {
+    const code = input.value.trim().toUpperCase();
+    if (validCodes.includes(code)) {
+        launchConfetti();
+        showTooltip("Промокод применён! 🎉");
+    } else {
+        showTooltip("❌ Неверный промокод");
+    }
+
+    setTimeout(() => {
+        knob.style.transition = "0.3s";
+        knob.style.left = "0px";
+        setTimeout(() => knob.style.transition = "", 300);
+    }, 300);
+}
+
+/* СТЕКЛЯННЫЙ ТУЛТИП */
+function showTooltip(text) {
+    const t = document.createElement("div");
+    t.className = "tooltip-glass";
+    t.innerText = text;
+    document.body.appendChild(t);
+
+    function remove(){
+        t.style.animation = "fadeOut .3s forwards";
+        setTimeout(() => t.remove(), 300);
+        document.removeEventListener("click", remove);
+    }
+
+    setTimeout(() => document.addEventListener("click", remove), 100);
+}
+
+/* CONFETTI */
 function launchConfetti() {
     for (let i = 0; i < 150; i++) {
         const c = document.createElement("div");
@@ -843,13 +900,11 @@ function launchConfetti() {
             [Math.floor(Math.random()*6)];
 
         const startX = window.innerWidth / 2;
-        const startY = 0;
-
         const endX = startX + (Math.random() - 0.5) * 600;
         const endY = window.innerHeight + 200;
 
         c.animate([
-            { transform: `translate(${startX}px, -20px)`, opacity: 1 },
+            { transform: `translate(${startX}px, 0px)`, opacity: 1 },
             { transform: `translate(${endX}px, ${endY}px) rotate(720deg)`, opacity: 0 }
         ], {
             duration: 1200 + Math.random() * 1000,
