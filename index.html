@@ -593,32 +593,28 @@ body {
      
     <br>
 </div>
-<!-- Конфети -->
 
-    <!-- ПРОМОКОД -->
-<div id="promo_section" style="margin-top:25px; text-align:center;">
 
-    <input id="promo_input"
-           type="text"
+    <!-- PROMO SECTION — будет видно только на экране оплаты -->
+<div id="new_promo_section" style="display:none; margin-top:15px; text-align:center;">
+    <input id="new_promo_input" 
+           type="text" 
            placeholder="Введите промокод"
-           style="width:75%; padding:12px; border-radius:10px; border:1px solid #6ab2f2; 
-                  font-size:16px; text-align:center;">
-
-    <button id="promo_btn"
-            onclick="applyPromo()"
-            style="margin-top:12px; padding:12px 20px; background:#6ab2f2; color:white;
-                   font-size:16px; border:none; border-radius:10px; cursor:pointer;">
+           style="padding:10px; width:70%; border-radius:8px; border:1px solid #ccc;">
+    
+    <button id="new_promo_btn"
+            style="margin-top:10px; padding:10px 20px; border-radius:8px; border:none; background:#6ab2f2; color:white; cursor:pointer;">
         Применить промокод
     </button>
 </div>
 
-<!-- КОНФЕТТИ -->
-<div id="confetti-container"></div>
+<!-- Всплывающее стеклянное окно промокода -->
+<div id="new_promo_tooltip" class="tooltip-glass"></div>
 
-<!-- ТУЛТИП -->
-<div id="promo_tooltip" class="tooltip-glass">
-    На баланс будет начислена сумма, равная 50% от стоимости выбранной позиции.
-</div>
+<!-- Контейнер для конфетти -->
+<div id="new_confetti_container"></div>
+
+
 
 
 
@@ -818,85 +814,67 @@ document.querySelectorAll('.tooltip').forEach(t => {
 
 
 
-function applyPromo() {
-    const input = document.getElementById("promo_input").value.trim().toUpperCase();
+// список допустимых промокодов
+const validPromos = ["MAX50", "WELCOME", "BONUS100"];
 
-    if (input !== "MAX50") {
-        alert("Неверный промокод");
-        return;
-    }
+function showNewPromoTooltip(message) {
+    const tooltip = document.getElementById("new_promo_tooltip");
+    tooltip.innerHTML = message;
+    tooltip.classList.add("show");
 
-    makeConfetti();
-    showPromoTooltip();
+    setTimeout(() => tooltip.classList.remove("show"), 3000);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-function makeConfetti() {
-    const container = document.getElementById("confetti-container");
-
+function makeNewConfetti() {
+    const container = document.getElementById("new_confetti_container");
     for (let i = 0; i < 150; i++) {
         const p = document.createElement("div");
         p.className = "confetti-piece";
-
-        // старт из центра экрана
         p.style.left = "50%";
         p.style.top = "50%";
-
         p.style.width = p.style.height = (3 + Math.random() * 3) + "px";
-        p.style.background = randomColor();
-
+        p.style.background = ["#ff4757","#ffa502","#2ed573","#1e90ff","#ff6b81","#eccc68"][Math.floor(Math.random()*6)];
         container.appendChild(p);
 
-        animateConfetti(p);
+        const duration = 1200 + Math.random() * 1200;
+        const dx = (Math.random()-0.5) * window.innerWidth;
+        const dy = (Math.random()-0.5) * window.innerHeight;
+
+        p.animate([
+            { transform: "translate(0,0)", opacity:1 },
+            { transform: `translate(${dx}px,${dy}px) rotate(720deg)`, opacity:0 }
+        ], { duration, easing:"cubic-bezier(0.15,0.45,0.3,1)" });
+
+        setTimeout(() => p.remove(), duration);
     }
 }
 
-function randomColor() {
-    const arr = ["#ff4757", "#ffa502", "#2ed573", "#1e90ff", "#ff6b81", "#eccc68"];
-    return arr[Math.floor(Math.random() * arr.length)];
+// показываем поле промокода только на экране оплаты
+function showPromoSection() {
+    document.getElementById("new_promo_section").style.display = "block";
 }
 
-function animateConfetti(elem) {
-    const duration = 1200 + Math.random() * 1200;
-
-    const dx = (Math.random() - 0.5) * window.innerWidth;
-    const dy = (Math.random() - 0.5) * window.innerHeight;
-
-    elem.animate([
-        { transform: "translate(0,0)", opacity: 1 },
-        { transform: `translate(${dx}px, ${dy}px) rotate(720deg)`, opacity: 0 }
-    ], {
-        duration: duration,
-        easing: "cubic-bezier(0.15, 0.45, 0.3, 1)"
-    });
-
-    setTimeout(() => elem.remove(), duration);
-}
+// обработчик кнопки
+document.getElementById("new_promo_btn").addEventListener("click", () => {
+    const code = document.getElementById("new_promo_input").value.trim().toUpperCase();
+    if(validPromos.includes(code)){
+        makeNewConfetti();
+        showNewPromoTooltip(`🎉 Промокод "${code}" активирован!`);
+    } else {
+        showNewPromoTooltip(`❌ Неверный промокод`);
+    }
+});
 
 
-    function showPromoTooltip() {
-    const t = document.getElementById("promo_tooltip");
-
-    t.classList.add("show");
-
-    setTimeout(() => {
-        t.classList.remove("show");
-    }, 3000);
-}
-
-    
 
 
+
+
+
+
+
+
+ 
 
 
 
