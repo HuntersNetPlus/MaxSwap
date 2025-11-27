@@ -606,6 +606,13 @@ body {
     </button>
 </div>
 
+    <!-- Всплывающее стеклянное окно промокода -->
+<div id="promo_tooltip" class="tooltip-glass">
+    🎉 Промокод активирован!
+</div>
+
+<!-- Контейнер конфетти -->
+<div id="confetti-container"></div>
 
 
 
@@ -829,8 +836,6 @@ function applyPromo() {
 
 
 
-// --- ПРОМОКОД ---
-// обработчик кнопки
 document.getElementById("promo_btn").addEventListener("click", () => {
     const code = document.getElementById("promo_input").value.trim();
 
@@ -839,11 +844,13 @@ document.getElementById("promo_btn").addEventListener("click", () => {
         return;
     }
 
-    // 50% бонус от выбранной цены
     const bonus = (selected.price * 0.5).toFixed(2);
 
     showPromoTooltip(`🎉 Промокод активирован!<br>На баланс будет начислено: <b>${bonus} USDT</b>`);
+
+    makeConfetti();
 });
+
 
 
 
@@ -894,8 +901,10 @@ function animateConfetti(elem) {
 }
 
 
-    function showPromoTooltip() {
+function showPromoTooltip(message) {
     const t = document.getElementById("promo_tooltip");
+
+    if (message) t.innerHTML = message;
 
     t.classList.add("show");
 
