@@ -36,6 +36,83 @@ body {
     margin: 20px auto;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+.glass-status-btn {
+    width: 70%;
+    margin: 20px auto;
+    padding: 12px 18px;
+
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+
+    /* Стеклянный эффект */
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    position: relative;
+    overflow: hidden; /* чтобы блик не вылазил */
+}
+
+/* Анимация блика (как в Telegram) */
+.glass-status-btn::after {
+    content: "";
+    position: absolute;
+    top: -150%;
+    left: -150%;
+    width: 300%;
+    height: 300%;
+
+    background: linear-gradient(
+        60deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.6) 50%,
+        rgba(255,255,255,0) 100%
+    );
+
+    transform: rotate(15deg);
+    animation: shine-move 3s linear infinite;
+    pointer-events: none;
+}
+
+/* Ключевые кадры анимации */
+@keyframes shine-move {
+    from { transform: translateX(-100%) rotate(15deg); }
+    to   { transform: translateX(100%) rotate(15deg); }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
 .slide {
     position: absolute;
     top: 50%;
@@ -392,12 +469,13 @@ body {
 
     <div style="color:#6ab2f2; margin-bottom:7px"> <b>Сумма в этой валюте:</b> <b id="converted_amount">...</b></div>
    
-  <div style="margin-bottom:7px"><span class="tooltip"> <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Magnifying%20Glass%20Tilted%20Right.webp?raw=true" style="width:20px; vertical-align:middle"> Статус: ожидание оплаты [?]
+  <div class="glass-status-btn"><div style="margin-bottom:7px"><span class="tooltip"> <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Magnifying%20Glass%20Tilted%20Right.webp?raw=true" style="width:20px; vertical-align:middle"> Статус: ожидание оплаты [?]
     <span class="tooltiptext">
         <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Money%20With%20Wings.webp?raw=true" style="width:70px;"> <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Symbols/Currency%20Exchange.webp?raw=true" style="width:70px;"> <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Identification%20Card.webp?raw=true" style="width:70px;"><br>
       Карта будет активирована автоматически когда транзакция получит как минимум 4 подтверждения сети.
     </span>
   </span>
+  </div>
   </div>
 
         
