@@ -537,12 +537,12 @@ body {
     </div>
 
     <input id="promo_input" 
-           placeholder="Введите промокод" 
+           placeholder="...." 
            style="width:25%; padding:10px; border-radius:4px; border:1px solid #6ab2f2; font-size:16px;background:#253648; color:#6ab2f2;">
     
     <button id="promo_btn"
             style="padding:10px 20px; font-size:16px; border-radius:4px; background:#6ab2f2; color: white;">
-        <b>Проверить</b>
+        <b>Применить</b>
     </button>
 </div>
 
@@ -771,7 +771,7 @@ promoBtn.addEventListener("click", () => {
     if (!code) {
         showGlassToast(`
             <div style="text-align:center;">
-               <div><img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Pencil.webp?raw=true" style="width:70px;"><br>Введите промокод</div>
+               <div><img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Pencil.webp?raw=true" style="width:70px;"><br>Введите корректный промокод!</div>
             </div>
         `);
         return;
@@ -801,7 +801,7 @@ promoBtn.addEventListener("click", () => {
         showGlassToast(`
     <div style="text-align:center;">
         <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Symbols/Cross%20Mark.webp?raw=true" style="width:70px;"> <br>
-        <div>Введён неверный промокод!</div>
+        <div>Введён некорректный промокод!</div>
     </div>
 `, 2000); // 2000 мс = 2 сек
 
