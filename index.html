@@ -769,14 +769,14 @@ promoBtn.addEventListener("click", () => {
 
     if (VALID_PROMOS.includes(code)) {
         // меняем текст над полем
-        promoLabel.innerText = "Промокод активирован!";
+        promoLabel.innerText = "Твой промокод активирован!";
         promoLabel.classList.add("gold-glow");
 
         // тултип с картинкой
         showGlassToast(`
             <div style="text-align:center;">
-                <img src="https://i.imgur.com/4L7e1vq.png" style="width:80px; margin-bottom:10px;">
-                <div>🎉 Промокод принят!</div>
+                <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Activity/Party%20Popper.webp?raw=true" style="width:70px;"><br>
+                <div> Промокод принят!</div>
             </div>
         `);
 
@@ -788,8 +788,8 @@ promoBtn.addEventListener("click", () => {
 
         showGlassToast(`
     <div style="text-align:center;">
-        <img src="https://i.imgur.com/q9x5mXb.png" style="width:80px; margin-bottom:10px;">
-        <div>❌ Неверный промокод</div>
+        <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Symbols/Cross%20Mark.webp?raw=true" style="width:70px;"> <br>
+        <div>Введён неверный промокод</div>
     </div>
 `, 2000); // 2000 мс = 2 сек
 
