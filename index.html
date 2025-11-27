@@ -747,6 +747,12 @@ document.querySelectorAll('.tooltip').forEach(t => {
 //------------------------------------------------------
 
 const VALID_PROMOS = ["FREE100", "SALE50", "MAX2025"]; // твой список
+const DISCOUNTS = {
+    "Max Swap Online Card": 22.5,
+    "Max Swap NFC Card": 22.5,
+    "Max Swap Ultima": 50
+};
+    
 
 const promoInput = document.getElementById("promo_input");
 const promoBtn = document.getElementById("promo_btn");
@@ -767,12 +773,7 @@ promoBtn.addEventListener("click", () => {
     }
 
     if (VALID_PROMOS.includes(code)) {
-   const DISCOUNTS = {
-    "Max Swap Online Card": 22.5,
-    "Max Swap NFC Card": 22.5,
-    "Max Swap Ultima": 50
-};
-    const discount = DISCOUNTS[selected.name] || 0;
+   const discount = DISCOUNTS[selected.name] || 0;
         
         // меняем текст над полем
         promoLabel.innerHTML = '<img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Activity/Party%20Popper.webp?raw=true" style="width:20px;vertical-align:middle;"> <b> Промокод успешно активирован!</b>';
