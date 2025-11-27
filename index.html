@@ -788,178 +788,6 @@ document.querySelectorAll('.tooltip').forEach(t => {
 
 
 
-// --- SLIDER & PROMO logic ---
-  const input = document.getElementById('promo_input');
-  const sliderWrapper = document.getElementById('slider_wrapper');
-  const knob = document.getElementById('slider_knob');
-  const sliderText = document.getElementById('slider_text');
-  const confettiContainer = document.getElementById('confetti-container');
-
-  let sliderVisible = false;
-  let activePointer = null;
-  let startX = 0;
-  let startLeft = 0;
-
-  function maxLeft(){
-    const pad = 6;
-    return Math.max(6, sliderWrapper.clientWidth - knob.clientWidth - pad);
-  }
-  function resetKnob(){
-    knob.style.transition = 'left .25s cubic-bezier(.2,.9,.2,1)';
-    knob.style.left = '6px';
-    setTimeout(()=> knob.style.transition = 'none', 300);
-  }
-  function resetKnobImmediate(){
-    knob.style.transition = 'none';
-    knob.style.left = '6px';
-  }
-
-  input.addEventListener('input', () => {
-    const v = input.value.trim();
-    if (v.length >= 1) {
-      if (!sliderVisible) {
-        sliderWrapper.style.display = 'block';
-        sliderWrapper.setAttribute('aria-hidden','false');
-        sliderVisible = true;
-      }
-    } else {
-      sliderWrapper.style.display = 'none';
-      sliderWrapper.setAttribute('aria-hidden','true');
-      sliderVisible = false;
-      resetKnobImmediate();
-    }
-  });
-
-  // pointer drag
-  knob.addEventListener('pointerdown', (evt) => {
-    evt.preventDefault();
-    knob.setPointerCapture(evt.pointerId);
-    activePointer = evt.pointerId;
-    startX = evt.clientX;
-    startLeft = clamp(parseFloat(getComputedStyle(knob).left) || 6, 6, maxLeft());
-    knob.style.transition = 'none';
-  });
-
-  document.addEventListener('pointermove', (evt) => {
-    if (activePointer !== evt.pointerId) return;
-    evt.preventDefault();
-    const dx = evt.clientX - startX;
-    let newLeft = startLeft + dx;
-    newLeft = Math.max(6, Math.min(newLeft, maxLeft()));
-    knob.style.left = newLeft + 'px';
-  });
-
-  document.addEventListener('pointerup', (evt) => {
-    if (activePointer !== evt.pointerId) return;
-    knob.releasePointerCapture(evt.pointerId);
-    activePointer = null;
-    const left = parseFloat(getComputedStyle(knob).left);
-    const ratio = left / maxLeft();
-    if (ratio >= SLIDE_COMPLETE_THRESHOLD) {
-      knob.style.left = maxLeft() + 'px';
-      knob.style.transition = 'left .15s ease';
-      onSlideComplete();
-    } else {
-      resetKnob();
-    }
-  });
-
-  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
-
-  function onSlideComplete(){
-    const code = (input.value || '').trim().toUpperCase();
-    const ok = VALID.includes(code);
-
-    if (ok) {
-      showTooltip('🎉 Промокод принят!');
-      launchConfetti();
-    } else {
-      showTooltip('❌ Неверный промокод');
-    }
-
-    setTimeout(()=> resetKnob(), 420);
-  }
-
-  // tooltip management
-  let currentTooltip = null;
-  function showTooltip(text){
-    removeTooltip();
-    const t = document.createElement('div');
-    t.className = 'tooltip-glass';
-    t.innerHTML = text;
-    document.body.appendChild(t);
-    currentTooltip = t;
-
-    function onDocClick(){
-      removeTooltip();
-      document.removeEventListener('pointerdown', onDocClick);
-    }
-    setTimeout(()=> document.addEventListener('pointerdown', onDocClick), 50);
-  }
-  function removeTooltip(){
-    if (!currentTooltip) return;
-    currentTooltip.remove();
-    currentTooltip = null;
-  }
-
-  // confetti
-  function launchConfetti(){
-    removeConfetti();
-    const count = 120;
-    for (let i=0;i<count;i++){
-      const el = document.createElement('div');
-      el.className = 'confetti-piece';
-      const w = 6 + Math.random()*10;
-      el.style.width = w + 'px';
-      el.style.height = (4 + Math.random()*6) + 'px';
-      el.style.left = (50 + (Math.random()-0.5)*30) + '%';
-      el.style.top = '30%';
-      const colors = ['#ff4757','#ffa502','#2ed573','#1e90ff','#ff6b81','#eccc68'];
-      el.style.background = colors[Math.floor(Math.random()*colors.length)];
-      el.style.opacity = '1';
-      confettiContainer.appendChild(el);
-
-      const angle = (Math.random()*Math.PI*2);
-      const distX = Math.cos(angle) * (200 + Math.random()*500);
-      const distY = Math.sin(angle) * (200 + Math.random()*500);
-      const rot = (Math.random()>0.5?1:-1) * (360 + Math.random()*720);
-
-      el.animate([
-        { transform:`translate(0px,0px) rotate(0deg)`, opacity:1 },
-        { transform:`translate(${distX}px, ${distY}px) rotate(${rot}deg)`, opacity:0 }
-      ], {
-        duration: 900 + Math.random()*900,
-        easing: 'cubic-bezier(.2,.7,.2,1)'
-      });
-
-      setTimeout(()=> el.remove(), 2200);
-    }
-    setTimeout(removeConfetti, 4000);
-  }
-  function removeConfetti(){ confettiContainer.innerHTML = ''; }
-
-  // close tooltip/confetti on doc click (if present)
-  document.addEventListener('pointerdown', (e) => {
-    if (currentTooltip) removeTooltip();
-  });
-
-  // prevent drag ghost on knob
-  knob.addEventListener('dragstart', e=> e.preventDefault());
-
-  // accessibility: Enter to quick test (optional)
-  input.addEventListener('keydown', (e)=>{
-    if (e.key === 'Enter' && input.value.trim().length>0){
-      if (!sliderVisible) {
-        sliderWrapper.style.display='block';
-        sliderVisible=true;
-        setTimeout(()=> {
-          knob.style.transition='left .15s ease';
-          knob.style.left = maxLeft() + 'px';
-          setTimeout(()=> onSlideComplete(), 160);
-        }, 120);
-      }
-    }
-  });
 
   // slideshow (small)
   const slides = document.querySelectorAll(".slide");
@@ -977,6 +805,157 @@ document.querySelectorAll('.tooltip').forEach(t => {
   setInterval(nextSlide, 3000);
 
 }); // DOMContentLoaded end
+//------------------------------------------------------
+//    НОВЫЙ ЧИСТЫЙ РАБОЧИЙ PROMO + SLIDER БЕЗ ДУБЛЕЙ
+//------------------------------------------------------
+
+const VALID = ["FREE100", "SALE50", "MAX2025"];  // добавь свои
+const SLIDE_COMPLETE_THRESHOLD = 0.87;
+
+const promoInput = document.getElementById('promo_input');
+const sliderWrapper = document.getElementById('slider_wrapper');
+const knob = document.getElementById('slider_knob');
+const sliderText = document.getElementById('slider_text');
+const confettiContainer = document.getElementById('confetti-container');
+
+let sliderVisible = false;
+let activePointer = null;
+let dragStartX = 0;
+let knobStartLeft = 0;
+
+// функция для границы knob
+function sliderMaxLeft() {
+    return sliderWrapper.clientWidth - knob.clientWidth - 6;
+}
+
+function sliderReset() {
+    knob.style.transition = 'left .25s ease';
+    knob.style.left = '6px';
+    setTimeout(() => knob.style.transition = 'none', 260);
+}
+
+// появление / скрытие слайдера
+promoInput.addEventListener("input", () => {
+    const val = promoInput.value.trim();
+
+    if (val.length > 0) {
+        if (!sliderVisible) {
+            sliderWrapper.style.display = "block";
+            sliderVisible = true;
+        }
+    } else {
+        sliderWrapper.style.display = "none";
+        sliderVisible = false;
+        knob.style.left = "6px";
+    }
+});
+
+// начало тач-движения
+knob.addEventListener("pointerdown", (ev) => {
+    ev.preventDefault();
+    knob.setPointerCapture(ev.pointerId);
+
+    activePointer = ev.pointerId;
+    dragStartX = ev.clientX;
+    knobStartLeft = parseFloat(getComputedStyle(knob).left);
+});
+
+// движение
+document.addEventListener("pointermove", (ev) => {
+    if (ev.pointerId !== activePointer) return;
+
+    let dx = ev.clientX - dragStartX;
+    let left = knobStartLeft + dx;
+
+    if (left < 6) left = 6;
+    if (left > sliderMaxLeft()) left = sliderMaxLeft();
+
+    knob.style.left = left + "px";
+});
+
+// отпускание — проверка
+document.addEventListener("pointerup", (ev) => {
+    if (ev.pointerId !== activePointer) return;
+    activePointer = null;
+
+    let left = parseFloat(getComputedStyle(knob).left);
+    if (left / sliderMaxLeft() >= SLIDE_COMPLETE_THRESHOLD) {
+        knob.style.left = sliderMaxLeft() + "px";
+        knob.style.transition = "left .15s ease";
+        handlePromoCheck();
+    } else {
+        sliderReset();
+    }
+});
+
+// проверка промокода
+function handlePromoCheck() {
+    const code = promoInput.value.trim().toUpperCase();
+    const ok = VALID.includes(code);
+
+    if (ok) {
+        showGlassToast("🎉 Промокод активирован!");
+        launchConfetti();
+    } else {
+        showGlassToast("❌ Неверный промокод");
+    }
+
+    setTimeout(sliderReset, 400);
+}
+
+// стеклянный тултип
+let toastEl = null;
+function showGlassToast(msg) {
+    if (toastEl) toastEl.remove();
+
+    toastEl = document.createElement("div");
+    toastEl.className = "tooltip-glass";
+    toastEl.innerHTML = msg;
+    document.body.appendChild(toastEl);
+
+    function hide() {
+        toastEl?.remove();
+        toastEl = null;
+        document.removeEventListener("pointerdown", hide);
+    }
+
+    setTimeout(() => {
+        document.addEventListener("pointerdown", hide);
+    }, 50);
+}
+
+// конфетти
+function launchConfetti() {
+    confettiContainer.innerHTML = "";
+
+    for (let i = 0; i < 120; i++) {
+        const el = document.createElement("div");
+        el.className = "confetti-piece";
+
+        el.style.left = (50 + Math.random() * 30 - 15) + "%";
+        el.style.top = "30%";
+        el.style.width = (6 + Math.random() * 8) + "px";
+        el.style.height = (4 + Math.random() * 6) + "px";
+
+        const colors = ["#ff4757", "#ffa502", "#2ed573", "#1e90ff", "#ff6b81"];
+        el.style.background = colors[Math.floor(Math.random()*colors.length)];
+
+        confettiContainer.appendChild(el);
+
+        const dx = (Math.random() - 0.5) * 600;
+        const dy = 250 + Math.random() * 600;
+
+        el.animate([
+            { transform: "translate(0,0)", opacity: 1 },
+            { transform: `translate(${dx}px, ${dy}px)`, opacity: 0 }
+        ], {
+            duration: 900 + Math.random() * 900,
+            easing: "cubic-bezier(.2,.7,.2,1)"
+        });
+
+        setTimeout(() => el.remove(), 2000);
+    }
+}
 
 
 
