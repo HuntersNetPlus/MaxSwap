@@ -91,95 +91,97 @@ body {
 
 
 
-/* INPUT */
-#promo_input {
-    padding: 14px;
-    font-size: 18px;
-    width: 260px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-    text-align: center;
-    margin-bottom: 20px;
-}
 
-/* SLIDER */
-#slider_wrapper {
-    width: 300px;
-    height: 60px;
-    background: #222;
-    border-radius: 40px;
-    margin: 20px auto 0;
-    position: relative;
-    display: none; /* появляется только при вводе */
-    border: 2px solid #444;
-    overflow: hidden;
-}
+  /* поле ввода */
+  #promo_input{
+    width:84vw; max-width:360px;
+    padding:14px 16px;
+    font-size:18px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,0.06);
+    background:#0b1116;
+    color:white;
+    outline:none;
+    box-sizing:border-box;
+    text-align:center;
+  }
 
-#slider_text {
-    position: absolute;
-    width: 100%;
-    top: 17px;
-    left: 0;
-    color: #aaa;
-    pointer-events: none;
-    font-size: 16px;
-}
+  /* слайдер-рамка */
+  #slider_wrapper{
+    width:84vw; max-width:360px;
+    height:64px;
+    margin-top:14px;
+    border-radius:40px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    display:none; /* show when typing */
+    position:relative;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.04);
+  }
 
-#slider_knob {
-    width: 60px;
-    height: 60px;
-    background: #4ea7ff;
-    border-radius: 50%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    cursor: grab;
-    touch-action: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    user-select: none;
-}
+  #slider_text{
+    position:absolute; left:0; right:0; top:0; bottom:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:15px; color:#9fb8d8; pointer-events:none;
+    user-select:none;
+  }
 
-/* CONFETTI */
-.confetti {
-    position: fixed;
-    width: 10px;
-    height: 10px;
-    background: red;
-    top: 0;
-    left: 50%;
-    z-index: 9999;
-    opacity: 0;
-    pointer-events: none;
-}
+  /* knob */
+  #slider_knob{
+    position:absolute;
+    left:6px; top:6px;
+    width:52px; height:52px; border-radius:50%;
+    background:var(--accent);
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;
+    color:#022033;
+    touch-action:none;
+    user-select:none;
+    box-shadow: 0 8px 18px rgba(78,167,255,0.14);
+    transition: box-shadow .18s ease;
+  }
+  #slider_knob:active{ box-shadow: 0 6px 12px rgba(78,167,255,0.08); }
 
-/* GLASS TOOLTIP */
-.tooltip-glass {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 18px 28px;
-    backdrop-filter: blur(12px);
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 16px;
-    color: white;
-    font-size: 17px;
-    z-index: 99999;
-    opacity: 0;
-    animation: fadeIn .3s forwards;
-}
+  /* success badge small */
+  .badge {
+    margin-top:12px;
+    font-size:13px;
+    color:#bfe9ff;
+  }
 
-@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-@keyframes fadeOut { from {opacity:1;} to {opacity:0;} }
+  /* стеклянный тултип */
+  .tooltip-glass{
+    position:fixed;
+    left:50%; top:40%;
+    transform:translate(-50%,-50%);
+    min-width:200px;
+    max-width:90vw;
+    padding:14px 18px;
+    border-radius:14px;
+    background: rgba(255,255,255,0.10);
+    backdrop-filter: blur(10px);
+    border:1px solid rgba(255,255,255,0.18);
+    color:#002233;
+    text-align:center;
+    z-index:9999;
+    font-weight:600;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  }
 
+  /* конфетти */
+  #confetti-container{
+    pointer-events:none;
+    position:fixed; inset:0; z-index:9998; overflow:hidden;
+  }
+  .confetti-piece{
+    position:absolute;
+    will-change: transform, opacity;
+    border-radius:2px;
+  }
 
-
-
+  /* small helper */
+  .hidden{display:none}
 
 
 
@@ -579,15 +581,22 @@ body {
 
 
 
-    
+     <div class="wrap">
+    <h1>Введите промокод</h1>
+    <p class="sub">Вводи код → потом проведи слайдер, чтобы подтвердить</p>
 
-<input id="promo_input" placeholder="Промокод">
+    <input id="promo_input" placeholder="Введите промокод" autocomplete="off" autocapitalize="characters" />
 
-<!-- SLIDER -->
-<div id="slider_wrapper">
-    <div id="slider_text">Проведите, чтобы подтвердить</div>
-    <div id="slider_knob">➡️</div>
-</div>
+    <div id="slider_wrapper" aria-hidden="true">
+      <div id="slider_text">Проведите вправо, чтобы подтвердить</div>
+      <div id="slider_knob" role="button" aria-label="Slide to confirm">→</div>
+    </div>
+
+    <div id="status_badge" class="badge" aria-live="polite"></div>
+  </div>
+
+  <div id="confetti-container"></div>
+
 
 
 
@@ -784,137 +793,208 @@ document.querySelectorAll('.tooltip').forEach(t => {
 
 
 
+/* ---------- настройки ---------- */
+const VALID = ["MAX50","WELCOME","BONUS100","TESTCODE"]; // список промокодов (UPPERCASE)
+const SLIDE_COMPLETE_THRESHOLD = 0.92; // порог достижения конца (в процентах ширины)
+/* -------------------------------- */
 
+const input = document.getElementById('promo_input');
+const sliderWrapper = document.getElementById('slider_wrapper');
+const knob = document.getElementById('slider_knob');
+const sliderText = document.getElementById('slider_text');
+const confettiContainer = document.getElementById('confetti-container');
+const statusBadge = document.getElementById('status_badge');
 
-const validCodes = ["MAX50", "WELCOME", "BONUS100"];
+let sliderVisible = false;
+let activePointer = null;
+let startX = 0;
+let startLeft = 0;
 
-const input = document.getElementById("promo_input");
-const slider = document.getElementById("slider_wrapper");
-const knob = document.getElementById("slider_knob");
-
-/* ПОКАЗ СЛАЙДЕРА ПРИ ВВОДЕ */
-input.addEventListener("input", () => {
-    slider.style.display = input.value.length > 0 ? "block" : "none";
+/* показываем слайдер при вводе >=1 символа */
+input.addEventListener('input', () => {
+  const v = input.value.trim();
+  if (v.length >= 1) {
+    if (!sliderVisible) {
+      sliderWrapper.style.display = 'block';
+      sliderWrapper.setAttribute('aria-hidden','false');
+      sliderVisible = true;
+    }
+  } else {
+    sliderWrapper.style.display = 'none';
+    sliderWrapper.setAttribute('aria-hidden','true');
+    sliderVisible = false;
+    resetKnobImmediate();
+  }
 });
 
-/* ЛОГИКА СЛАЙДЕРА */
-let dragging = false;
-let startX = 0;
-let offsetX = 0;
+/* pointer-based drag (работает для тач и мыши) */
+knob.addEventListener('pointerdown', (evt) => {
+  evt.preventDefault();
+  knob.setPointerCapture(evt.pointerId);
+  activePointer = evt.pointerId;
+  startX = evt.clientX;
+  startLeft = clamp(parseFloat(getComputedStyle(knob).left) || 6, 6, maxLeft());
+  knob.style.transition = 'none';
+});
 
-function startDrag(e) {
-    dragging = true;
-    startX = e.touches ? e.touches[0].clientX : e.clientX;
-    offsetX = knob.offsetLeft;
+document.addEventListener('pointermove', (evt) => {
+  if (activePointer !== evt.pointerId) return;
+  evt.preventDefault();
+  const dx = evt.clientX - startX;
+  let newLeft = startLeft + dx;
+  newLeft = Math.max(6, Math.min(newLeft, maxLeft()));
+  knob.style.left = newLeft + 'px';
+});
+
+document.addEventListener('pointerup', (evt) => {
+  if (activePointer !== evt.pointerId) return;
+  knob.releasePointerCapture(evt.pointerId);
+  activePointer = null;
+  const left = parseFloat(getComputedStyle(knob).left);
+  const ratio = left / maxLeft();
+  if (ratio >= SLIDE_COMPLETE_THRESHOLD) {
+    // завершили
+    knob.style.left = maxLeft() + 'px';
+    knob.style.transition = 'left .15s ease';
+    onSlideComplete();
+  } else {
+    // откат
+    resetKnob();
+  }
+});
+
+function maxLeft(){
+  // правый край = ширина контейнера - ширина knob - 6px padding
+  const pad = 6;
+  return Math.max(6, sliderWrapper.clientWidth - knob.clientWidth - pad);
+}
+function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+function resetKnob(){
+  knob.style.transition = 'left .25s cubic-bezier(.2,.9,.2,1)';
+  knob.style.left = '6px';
+  setTimeout(()=> knob.style.transition = 'none', 300);
+}
+function resetKnobImmediate(){
+  knob.style.transition = 'none';
+  knob.style.left = '6px';
 }
 
-function doDrag(e) {
-    if (!dragging) return;
+/* slide completed -> проверяем промокод */
+function onSlideComplete(){
+  const code = (input.value || '').trim().toUpperCase();
+  const ok = VALID.includes(code);
 
-    const x = e.touches ? e.touches[0].clientX : e.clientX;
-    const dx = x - startX;
+  if (ok) {
+    showTooltip('🎉 Промокод принят!');
+    launchConfetti();
+    statusBadge.textContent = 'Промокод применён';
+  } else {
+    showTooltip('❌ Неверный промокод');
+    statusBadge.textContent = 'Неверный код';
+  }
 
-    let newLeft = offsetX + dx;
-    const maxRight = slider.clientWidth - knob.clientWidth;
+  // после короткой паузы откатываем ползунок, чтобы можно было снова использовать
+  setTimeout(() => {
+    resetKnob();
+  }, 400);
+}
 
-    if (newLeft < 0) newLeft = 0;
-    if (newLeft > maxRight) newLeft = maxRight;
+/* стеклянный тултип — удаляется при клике по документу */
+let currentTooltip = null;
+function showTooltip(text){
+  removeTooltip(); // убрать предыдущий если есть
+  const t = document.createElement('div');
+  t.className = 'tooltip-glass';
+  t.innerHTML = text;
+  document.body.appendChild(t);
+  currentTooltip = t;
 
-    knob.style.left = newLeft + "px";
+  // убрать при клике по странице (однократно)
+  function onDocClick(){
+    removeTooltip();
+    document.removeEventListener('pointerdown', onDocClick);
+  }
+  // небольшой таймаут, чтобы первый клик, приведший к созданию тултипа, не закрывал его
+  setTimeout(()=> document.addEventListener('pointerdown', onDocClick), 50);
+}
+function removeTooltip(){
+  if (!currentTooltip) return;
+  currentTooltip.remove();
+  currentTooltip = null;
+}
 
-    if (newLeft >= maxRight) {
-        dragging = false;
-        knob.style.left = maxRight + "px";
-        checkPromo();
+/* конфетти — простая реализация */
+function launchConfetti(){
+  removeConfetti(); // чистим старое
+  const count = 120;
+  for (let i=0;i<count;i++){
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    const w = 6 + Math.random()*10;
+    el.style.width = w + 'px';
+    el.style.height = (4 + Math.random()*6) + 'px';
+    el.style.left = (50 + (Math.random()-0.5)*30) + '%'; // около центра
+    el.style.top = '30%';
+    const colors = ['#ff4757','#ffa502','#2ed573','#1e90ff','#ff6b81','#eccc68'];
+    el.style.background = colors[Math.floor(Math.random()*colors.length)];
+    el.style.opacity = '1';
+    confettiContainer.appendChild(el);
+
+    // анимация движения от центра наружу
+    const angle = (Math.random()*Math.PI*2);
+    const distX = Math.cos(angle) * (200 + Math.random()*500);
+    const distY = Math.sin(angle) * (200 + Math.random()*500);
+    const rot = (Math.random()>0.5?1:-1) * (360 + Math.random()*720);
+
+    el.animate([
+      { transform:`translate(0px,0px) rotate(0deg)`, opacity:1 },
+      { transform:`translate(${distX}px, ${distY}px) rotate(${rot}deg)`, opacity:0 }
+    ], {
+      duration: 900 + Math.random()*900,
+      easing: 'cubic-bezier(.2,.7,.2,1)'
+    });
+
+    // удаляем после анимации
+    setTimeout(()=> el.remove(), 2200);
+  }
+
+  // также удалить автоматически через 4с
+  setTimeout(removeConfetti, 4000);
+}
+function removeConfetti(){
+  confettiContainer.innerHTML = '';
+}
+
+/* очистка тултипа и конфетти при резком клике по документу */
+document.addEventListener('pointerdown', (e) => {
+  // но не закрываем когда кликают по input/sliders themselves before showing
+  // (если тултип есть — удалим)
+  if (currentTooltip) removeTooltip();
+});
+
+/* предотвращаем выделение текста при долгом таче по knob */
+knob.addEventListener('dragstart', e=> e.preventDefault());
+
+/* accessibility: enter -> если есть текст, показать слайдер (дублируем) */
+input.addEventListener('keydown', (e)=>{
+  if (e.key === 'Enter' && input.value.trim().length>0){
+    // emulate action: show slider then try to validate immediately
+    if (!sliderVisible) {
+      sliderWrapper.style.display='block';
+      sliderVisible=true;
+      setTimeout(()=> {
+        // visual quick slide to end and check (only for keyboard testing)
+        knob.style.transition='left .15s ease';
+        knob.style.left = maxLeft() + 'px';
+        setTimeout(()=> onSlideComplete(), 160);
+      }, 120);
     }
+  }
+});
+
+/* init: place knob left properly */
+resetKnobImmediate();
 }
-
-function endDrag() {
-    if (!dragging) return;
-    dragging = false;
-
-    const maxRight = slider.clientWidth - knob.clientWidth;
-
-    if (knob.offsetLeft < maxRight) {
-        knob.style.transition = "0.3s";
-        knob.style.left = "0px";
-        setTimeout(() => knob.style.transition = "", 300);
-    }
-}
-
-/* EVENTS */
-knob.addEventListener("mousedown", startDrag);
-knob.addEventListener("touchstart", startDrag);
-
-document.addEventListener("mousemove", doDrag);
-document.addEventListener("touchmove", doDrag);
-
-document.addEventListener("mouseup", endDrag);
-document.addEventListener("touchend", endDrag);
-
-/* ПРОВЕРКА ПРОМОКОДА */
-function checkPromo() {
-    const code = input.value.trim().toUpperCase();
-    if (validCodes.includes(code)) {
-        launchConfetti();
-        showTooltip("Промокод применён! 🎉");
-    } else {
-        showTooltip("❌ Неверный промокод");
-    }
-
-    setTimeout(() => {
-        knob.style.transition = "0.3s";
-        knob.style.left = "0px";
-        setTimeout(() => knob.style.transition = "", 300);
-    }, 300);
-}
-
-/* СТЕКЛЯННЫЙ ТУЛТИП */
-function showTooltip(text) {
-    const t = document.createElement("div");
-    t.className = "tooltip-glass";
-    t.innerText = text;
-    document.body.appendChild(t);
-
-    function remove(){
-        t.style.animation = "fadeOut .3s forwards";
-        setTimeout(() => t.remove(), 300);
-        document.removeEventListener("click", remove);
-    }
-
-    setTimeout(() => document.addEventListener("click", remove), 100);
-}
-
-/* CONFETTI */
-function launchConfetti() {
-    for (let i = 0; i < 150; i++) {
-        const c = document.createElement("div");
-        c.className = "confetti";
-        document.body.appendChild(c);
-
-        const size = Math.random() * 8 + 4;
-        c.style.width = size + "px";
-        c.style.height = size + "px";
-
-        c.style.background = ["#ff4757","#ffa502","#2ed573","#1e90ff","#ff6b81","#eccc68"]
-            [Math.floor(Math.random()*6)];
-
-        const startX = window.innerWidth / 2;
-        const endX = startX + (Math.random() - 0.5) * 600;
-        const endY = window.innerHeight + 200;
-
-        c.animate([
-            { transform: `translate(${startX}px, 0px)`, opacity: 1 },
-            { transform: `translate(${endX}px, ${endY}px) rotate(720deg)`, opacity: 0 }
-        ], {
-            duration: 1200 + Math.random() * 1000,
-            easing: "cubic-bezier(0.25,0.46,0.45,1)"
-        });
-
-        setTimeout(() => c.remove(), 2300);
-    }
-}
-
 
 
 
