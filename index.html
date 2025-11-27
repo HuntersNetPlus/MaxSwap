@@ -595,8 +595,8 @@ body {
 </div>
 
 
-    <!-- PROMO SECTION — будет видно только на экране оплаты -->
-<div id="new_promo_section" style="display:none; margin-top:15px; text-align:center;">
+  <!-- PROMO SECTION — будет видно только на экране оплаты -->
+<div id="new_promo_section" style="margin-top:15px; text-align:center;">
     <input id="new_promo_input" 
            type="text" 
            placeholder="Введите промокод"
@@ -868,7 +868,23 @@ document.getElementById("new_promo_btn").addEventListener("click", () => {
 
 
 
+function openScreen(id) {
+    Object.values(screens).forEach(s => s.classList.remove('active'));
 
+    loader.style.display = 'flex';
+    setTimeout(() => {
+        loader.style.display = 'none';
+        screens[id].classList.add('active');
+
+        // Показываем новый блок промокода только на экране оплаты
+        if (id === 'payment') {
+            document.getElementById('new_promo_section').style.display = 'block';
+        } else {
+            document.getElementById('new_promo_section').style.display = 'none';
+        }
+
+    }, 900);
+}
 
 
 
