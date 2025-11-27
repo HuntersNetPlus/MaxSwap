@@ -595,24 +595,24 @@ body {
 </div>
 
 
-  <!-- PROMO SECTION — будет видно только на экране оплаты -->
-<div id="new_promo_section" style="margin-top:15px; text-align:center;">
-    <input id="new_promo_input" 
+<!-- PROMO SECTION — видно только на экране оплаты -->
+<div id="promo_section" style="margin-top:15px; text-align:center;">
+    <input id="promo_input" 
            type="text" 
            placeholder="Введите промокод"
            style="padding:10px; width:70%; border-radius:8px; border:1px solid #ccc;">
     
-    <button id="new_promo_btn"
+    <button id="promo_btn"
             style="margin-top:10px; padding:10px 20px; border-radius:8px; border:none; background:#6ab2f2; color:white; cursor:pointer;">
         Применить промокод
     </button>
 </div>
 
 <!-- Всплывающее стеклянное окно промокода -->
-<div id="new_promo_tooltip" class="tooltip-glass"></div>
+<div id="promo_tooltip" class="tooltip-glass"></div>
 
 <!-- Контейнер для конфетти -->
-<div id="new_confetti_container"></div>
+<div id="confetti-container"></div>
 
 
 
@@ -814,19 +814,17 @@ document.querySelectorAll('.tooltip').forEach(t => {
 
 
 
-// список допустимых промокодов
 const validPromos = ["MAX50", "WELCOME", "BONUS100"];
 
-function showNewPromoTooltip(message) {
-    const tooltip = document.getElementById("new_promo_tooltip");
+function showPromoTooltip(message) {
+    const tooltip = document.getElementById("promo_tooltip");
     tooltip.innerHTML = message;
     tooltip.classList.add("show");
-
     setTimeout(() => tooltip.classList.remove("show"), 3000);
 }
 
-function makeNewConfetti() {
-    const container = document.getElementById("new_confetti_container");
+function makeConfetti() {
+    const container = document.getElementById("confetti-container");
     for (let i = 0; i < 150; i++) {
         const p = document.createElement("div");
         p.className = "confetti-piece";
@@ -849,21 +847,16 @@ function makeNewConfetti() {
     }
 }
 
-// показываем поле промокода только на экране оплаты
-function showPromoSection() {
-    document.getElementById("new_promo_section").style.display = "block";
-}
-
-// обработчик кнопки
-document.getElementById("new_promo_btn").addEventListener("click", () => {
-    const code = document.getElementById("new_promo_input").value.trim().toUpperCase();
+document.getElementById("promo_btn").addEventListener("click", () => {
+    const code = document.getElementById("promo_input").value.trim().toUpperCase();
     if(validPromos.includes(code)){
-        makeNewConfetti();
-        showNewPromoTooltip(`🎉 Промокод "${code}" активирован!`);
+        makeConfetti();
+        showPromoTooltip(`🎉 Промокод "${code}" активирован!`);
     } else {
-        showNewPromoTooltip(`❌ Неверный промокод`);
+        showPromoTooltip(`❌ Неверный промокод`);
     }
 });
+
 
 
 
@@ -876,11 +869,12 @@ function openScreen(id) {
         loader.style.display = 'none';
         screens[id].classList.add('active');
 
-        // Показываем новый блок промокода только на экране оплаты
+        // показываем/скрываем промо блок
+        const promo = document.getElementById('promo_section');
         if (id === 'payment') {
-            document.getElementById('new_promo_section').style.display = 'block';
+            promo.style.display = 'block';
         } else {
-            document.getElementById('new_promo_section').style.display = 'none';
+            promo.style.display = 'none';
         }
 
     }, 900);
