@@ -41,6 +41,37 @@ body {
 
 
 
+/* стеклянный тултип */
+.tooltip-glass {
+    position: fixed;
+    left: 50%;
+    top: 40%;
+    transform: translateX(-50%);
+    padding: 18px 26px;
+    border-radius: 14px;
+    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    font-size: 18px;
+    animation: fadeIn 0.25s ease;
+    z-index: 99999;
+    text-align: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, -20px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* конфетти */
+.confetti-piece {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    opacity: 0.9;
+    border-radius: 2px;
+}
 
 
 
@@ -484,7 +515,21 @@ body {
     <div id="qrcode"><canvas style="mix-blend-mode: screen;"></canvas></div>
 </div>
     
-        <br><br>
+  <div id="promo_area" style="margin-top:20px; text-align:center;">
+    <input id="promo_input" 
+           placeholder="Введите промокод" 
+           style="width:75%; padding:10px; border-radius:8px; border:1px solid #ccc; font-size:16px;">
+    <br><br>
+    <button id="promo_btn"
+            style="padding:10px 20px; font-size:16px; border-radius:8px; border:none; background:#6ab2f2; color:white;">
+        Проверить
+    </button>
+</div>
+
+<!-- контейнер для конфетти -->
+<div id="confetti-container"
+     style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; overflow:hidden;">
+</div>
      
     <br>
 </div>
@@ -678,6 +723,84 @@ document.querySelectorAll('.tooltip').forEach(t => {
 
 
 
+//------------------------------------------------------
+//      ПРОМО + ТУЛТИП + КОНФЕТИ
+//------------------------------------------------------
+
+const VALID_PROMOS = ["FREE100", "SALE50", "MAX2025"]; // добавь свои
+
+const promoInput = document.getElementById("promo_input");
+const promoBtn = document.getElementById("promo_btn");
+const confettiContainer = document.getElementById("confetti-container");
+
+promoBtn.addEventListener("click", () => {
+    const code = promoInput.value.trim().toUpperCase();
+
+    if (!code) {
+        showGlassToast("Введите промокод");
+        return;
+    }
+
+    if (VALID_PROMOS.includes(code)) {
+        showGlassToast("🎉 Промокод активирован!");
+        launchConfetti();
+    } else {
+        showGlassToast("❌ Неверный промокод");
+    }
+});
+
+// стеклянный тултип
+let toast = null;
+
+function showGlassToast(text) {
+    if (toast) toast.remove();
+
+    toast = document.createElement("div");
+    toast.className = "tooltip-glass";
+    toast.innerHTML = text;
+    document.body.appendChild(toast);
+
+    function close() {
+        toast.remove();
+        toast = null;
+        document.removeEventListener("pointerdown", close);
+    }
+
+    setTimeout(() => {
+        document.addEventListener("pointerdown", close);
+    }, 30);
+}
+
+// конфетти
+function launchConfetti() {
+    confettiContainer.innerHTML = "";
+
+    for (let i = 0; i < 90; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti-piece";
+
+        const colors = ["#ff4757", "#ffa502", "#2ed573", "#1e90ff", "#ff6b81"];
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+        c.style.left = (Math.random() * 100) + "%";
+        c.style.top = "100%";
+
+        confettiContainer.appendChild(c);
+
+        const dx = (Math.random() - 0.5) * 600;
+        const dy = -600 - Math.random() * 400;
+
+        c.animate([
+            { transform: "translate(0,0) rotate(0deg)", opacity: 1 },
+            { transform: `translate(${dx}px, ${dy}px) rotate(360deg)`, opacity: 0 }
+        ], {
+            duration: 1200 + Math.random() * 700,
+            easing: "cubic-bezier(.2,.7,.2,1)"
+        });
+
+        setTimeout(() => c.remove(), 2000);
+    }
+}
 
 
 
