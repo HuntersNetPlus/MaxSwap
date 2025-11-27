@@ -58,7 +58,7 @@ body {
 .tooltip-glass {
     position: fixed;
     left: 50%;
-    width: 70vw;
+    width: 65vw;
     top: 40%;
     transform: translateX(-50%);
     padding: 10px 10px;
@@ -781,14 +781,14 @@ promoBtn.addEventListener("click", () => {
    const discount = DISCOUNTS[selected.name] || 0;
         
         // меняем текст над полем
-        promoLabel.innerHTML = '<img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Activity/Party%20Popper.webp?raw=true" style="width:20px;vertical-align:middle;"> <b> Промокод успешно активирован!</b>';
+        promoLabel.innerHTML = '<img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Symbols/Free%20Button.webp?raw=true" style="width:20px;vertical-align:middle;"> <b> Промокод успешно активирован!</b>';
         promoLabel.classList.add("gold-glow");
 
    // тултип с картинкой и подстановкой discount
         showGlassToast(`
             <div style="text-align:center;">
                 <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Activity/Party%20Popper.webp?raw=true" style="width:70px;"><br>
-                <div><b>Промокод успешно принят!</b><br> После активации карты на баланс будет зачислено ${discount} USDT! <br> Промокод действует 24 часа! </div>
+                <div><b>Промокод успешно принят!</b><br><br> После активации карты на баланс будет зачислено ${discount} USDT! <br><br> Промокод действует 24 часа! </div>
             </div>
         `);
 
@@ -859,11 +859,11 @@ function launchConfetti() {
             { transform: "translate(0,0) rotate(0deg)", opacity: 1 },
             { transform: `translate(${dx}px, ${dy}px) rotate(360deg)`, opacity: 0 }
         ], {
-            duration: 1200 + Math.random() * 700,
+            duration: 3200 + Math.random() * 700,
             easing: "cubic-bezier(.2,.7,.2,1)"
         });
 
-        setTimeout(() => c.remove(), 2000);
+        setTimeout(() => c.remove(), 5000);
     }
 }
 
