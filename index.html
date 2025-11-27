@@ -589,39 +589,22 @@ body {
     <div id="qrcode"><canvas style="mix-blend-mode: screen;"></canvas></div>
 </div>
     
-        <br><br>
-     
-    <br>
-</div>
-<!-- Конфети -->
+             
+  </div>
 
-    <!-- ПРОМОКОД -->
-<div id="promo_section" style="margin-top:25px; text-align:center;">
 
-    <input id="promo_input"
-           type="text"
+ <!-- PROMO SECTION — будет видно только на последнем экране -->
+<div id="promo_section" style="display:none; margin-top:15px; text-align:center;">
+    <input id="promo_input" 
+           type="text" 
            placeholder="Введите промокод"
-           style="width:75%; padding:12px; border-radius:10px; border:1px solid #6ab2f2; 
-                  font-size:16px; text-align:center;">
-
+           style="padding:10px; width:70%; border-radius:8px; border:1px solid #ccc;">
+    
     <button id="promo_btn"
-            onclick="applyPromo()"
-            style="margin-top:12px; padding:12px 20px; background:#6ab2f2; color:white;
-                   font-size:16px; border:none; border-radius:10px; cursor:pointer;">
+            style="margin-top:10px; padding:10px 20px; border-radius:8px; border:none; background:#6ab2f2; color:white;">
         Применить промокод
     </button>
 </div>
-
-<!-- КОНФЕТТИ -->
-<div id="confetti-container"></div>
-
-<!-- ТУЛТИП -->
-<div id="promo_tooltip" class="tooltip-glass">
-    На баланс будет начислена сумма, равная 50% от стоимости выбранной позиции.
-</div>
-
-
-
 
 
 
@@ -650,14 +633,27 @@ document.addEventListener('DOMContentLoaded', () => {
         USDC: "0xaacE295640C15344C6a2DC934a3AACcD4e23cc20"
     };
 
-    function openScreen(id) {
-        Object.values(screens).forEach(s => s.classList.remove('active'));
-        loader.style.display = 'flex';
-        setTimeout(() => {
-            loader.style.display = 'none';
-            screens[id].classList.add('active');
-        }, 900);
-    }
+function openScreen(id) {
+    Object.values(screens).forEach(s => s.classList.remove('active'));
+
+    loader.style.display = 'flex';
+    setTimeout(() => {
+        loader.style.display = 'none';
+        screens[id].classList.add('active');
+
+        // Показываем промокод только на экране оплаты
+        if (id === 'payment') {
+            document.getElementById('promo_section').style.display = 'block';
+        } else {
+            document.getElementById('promo_section').style.display = 'none';
+        }
+
+    }, 900); // твоя задержка лоадера
+}
+
+
+
+    
 
     function selectOption(name, price) {
         selected = { name, price };
