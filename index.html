@@ -38,6 +38,14 @@ body {
 
 
 
+.gold-glow {
+    color: #ffdd77 !important;
+    text-shadow:
+        0 0 6px #ffdd77,
+        0 0 12px #ffbb22,
+        0 0 20px #ffaa00;
+    transition: 0.3s ease;
+}
 
 
 
@@ -515,23 +523,28 @@ body {
     <div id="qrcode"><canvas style="mix-blend-mode: screen;"></canvas></div>
 </div>
     
-  <div id="promo_area" style="margin-top:10px; text-align:center;">
+  <div id="promo_area" style="margin-top:20px; text-align:center;">
+
+    <div id="promo_label" 
+         style="color:#ffffff; font-size:15px; margin-bottom:10px;">
+        Есть промокод? Введи его ниже!
+    </div>
+
     <input id="promo_input" 
-           placeholder="У меня есть промокод..." 
-           style="width:35%; padding:10px; border-radius:4px; background:#253648; border:1px solid #6ab2f2; font-size:16px;color:white;">
-       <button id="promo_btn"
-            style="padding:10px 20px; font-size:16px; border-radius:4px; border:none; background:#6ab2f2; color:white;">
+           placeholder="Введите промокод" 
+           style="width:75%; padding:10px; border-radius:8px; border:1px solid #ccc; font-size:16px;">
+    <br><br>
+
+    <button id="promo_btn"
+            style="padding:10px 20px; font-size:16px; border-radius:8px; border:none; background:#6ab2f2; color:white;">
         Проверить
     </button>
 </div>
 
-<!-- контейнер для конфетти -->
 <div id="confetti-container"
      style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; overflow:hidden;">
 </div>
-     
-    <br>
-</div>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
@@ -726,10 +739,12 @@ document.querySelectorAll('.tooltip').forEach(t => {
 //      ПРОМО + ТУЛТИП + КОНФЕТИ
 //------------------------------------------------------
 
-const VALID_PROMOS = ["FREE100", "SALE50", "MAX2025"]; // добавь свои
+
+const VALID_PROMOS = ["FREE100", "SALE50", "MAX2025"]; // твой список
 
 const promoInput = document.getElementById("promo_input");
 const promoBtn = document.getElementById("promo_btn");
+const promoLabel = document.getElementById("promo_label");
 const confettiContainer = document.getElementById("confetti-container");
 
 promoBtn.addEventListener("click", () => {
@@ -741,9 +756,18 @@ promoBtn.addEventListener("click", () => {
     }
 
     if (VALID_PROMOS.includes(code)) {
-        showGlassToast("🎉 Промокод активирован!");
+        // меняем текст над полем
+        promoLabel.innerText = "✨ Промокод активирован!";
+        promoLabel.classList.add("gold-glow");
+
+        // эффект
+        showGlassToast("🎉 Промокод принят!");
         launchConfetti();
     } else {
+        // возвращаем стандартный текст
+        promoLabel.innerText = "Есть промокод? Введи его ниже!";
+        promoLabel.classList.remove("gold-glow");
+
         showGlassToast("❌ Неверный промокод");
     }
 });
