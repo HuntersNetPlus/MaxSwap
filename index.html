@@ -646,14 +646,8 @@ document.addEventListener('DOMContentLoaded', () => {
         USDC: "0xaacE295640C15344C6a2DC934a3AACcD4e23cc20"
     };
 
-    function openScreen(id) {
-        Object.values(screens).forEach(s => s.classList.remove('active'));
-        loader.style.display = 'flex';
-        setTimeout(() => {
-            loader.style.display = 'none';
-            screens[id].classList.add('active');
-        }, 900);
-    }
+   
+   
 
     function selectOption(name, price) {
         selected = { name, price };
@@ -863,7 +857,6 @@ document.getElementById("promo_btn").addEventListener("click", () => {
 
 function openScreen(id) {
     Object.values(screens).forEach(s => s.classList.remove('active'));
-
     loader.style.display = 'flex';
     setTimeout(() => {
         loader.style.display = 'none';
