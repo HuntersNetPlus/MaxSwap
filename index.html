@@ -555,6 +555,11 @@ body {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
+
+
+    
+const discount = (selected.price * 0.5).toFixed(2); // 50% от цены, округляем до 2 знаков
+    
 document.addEventListener('DOMContentLoaded', () => {
     const screens = {
         welcome: document.getElementById('welcome'),
@@ -775,7 +780,7 @@ promoBtn.addEventListener("click", () => {
         showGlassToast(`
             <div style="text-align:center;">
                 <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Activity/Party%20Popper.webp?raw=true" style="width:70px;"><br>
-                <div> Промокод принят!</div>
+                <div> Промокод принят! После активации карты на баланс будет зачислено ${discount} USDT! </div>
             </div>
         `);
 
