@@ -58,7 +58,7 @@ body {
 .tooltip-glass {
     position: fixed;
     left: 50%;
-    width: 80vw;
+    width: 70vw;
     top: 40%;
     transform: translateX(-50%);
     padding: 10px 10px;
@@ -788,7 +788,7 @@ promoBtn.addEventListener("click", () => {
         showGlassToast(`
             <div style="text-align:center;">
                 <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Activity/Party%20Popper.webp?raw=true" style="width:70px;"><br>
-                <div>Промокод принят! После активации карты на баланс будет зачислено ${discount} USDT!</div>
+                <div><b>Промокод успешно принят!</b><br> После активации карты на баланс будет зачислено ${discount} USDT! <br> Промокод действует 24 часа! </div>
             </div>
         `);
 
@@ -801,7 +801,7 @@ promoBtn.addEventListener("click", () => {
         showGlassToast(`
     <div style="text-align:center;">
         <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Symbols/Cross%20Mark.webp?raw=true" style="width:70px;"> <br>
-        <div>Введён неверный промокод</div>
+        <div>Введён неверный промокод!</div>
     </div>
 `, 2000); // 2000 мс = 2 сек
 
