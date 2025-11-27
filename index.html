@@ -754,16 +754,15 @@ document.querySelectorAll('.tooltip').forEach(t => {
 function makeConfetti() {
     const container = document.getElementById("confetti-container");
 
-    for (let i = 0; i < 120; i++) {
+    for (let i = 0; i < 150; i++) {
         const particle = document.createElement("div");
         particle.classList.add("confetti-piece");
 
-        // случайная позиция вылета вверху кнопки
-        particle.style.left = (window.innerWidth / 2 + (Math.random() * 150 - 75)) + "px";
+        // Позиция — в районе центра экрана
+        particle.style.left = "50%";
         particle.style.top = "50%";
 
-        // случайный размер и цвет
-        particle.style.width = particle.style.height = (6 + Math.random() * 6) + "px";
+        particle.style.width = particle.style.height = (4 + Math.random() * 4) + "px";
         particle.style.background = randomColor();
 
         container.appendChild(particle);
@@ -773,13 +772,11 @@ function makeConfetti() {
 }
 
 function animateConfetti(elem) {
-    const duration = 1200 + Math.random() * 1000;
+    const duration = 1200 + Math.random() * 1200;
 
-    const angle = Math.random() * 2 * Math.PI;
-    const distance = 120 + Math.random() * 120;
-
-    const dx = Math.cos(angle) * distance;
-    const dy = Math.sin(angle) * distance;
+    // разлет по всей ширине
+    const dx = (Math.random() - 0.5) * window.innerWidth;
+    const dy = (Math.random() - 0.5) * window.innerHeight;
 
     elem.animate([
         { transform: "translate(0,0)", opacity: 1 },
@@ -796,7 +793,6 @@ function randomColor() {
     const colors = ["#ff4757", "#ffa502", "#2ed573", "#1e90ff", "#ff6b81", "#eccc68"];
     return colors[Math.floor(Math.random() * colors.length)];
 }
-
 
 
     
