@@ -586,12 +586,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function selectOption(name, price) {
-        selected = { name, price };
-        document.getElementById('pay_title').innerText = name;
-        document.getElementById('price_usdt').innerText = price;
-        openScreen('payment');
-        setTimeout(updateConversion, 500);
-    }
+    selected = {
+        name: name,
+        price: price,
+        discount: DISCOUNTS[name] || 0  // новая переменная discount
+    };
+
+    document.getElementById('pay_title').innerText = name;
+    document.getElementById('price_usdt').innerText = price;
+    openScreen('payment');
+    setTimeout(updateConversion, 500);
+}
 
     async function updateConversion() {
         const cur = document.getElementById("currency").value;
@@ -766,6 +771,11 @@ const confettiContainer = document.getElementById("confetti-container");
 
 
     // пример выбранной карты (должно быть то же, что у тебя в selected)
+    const DISCOUNTS = {
+    "Max Swap Online Card": 22.5,
+    "Max Swap NFC Card": 22.5,
+    "Max Swap Ultima": 50
+};
 let selected = { name: "Max Swap Online Card", price: 52.5 };
    
 // обработка кнопки "Проверить"
@@ -783,6 +793,7 @@ promoBtn.addEventListener("click", () => {
 
     if (VALID_PROMOS.includes(code)) {
    const discount = DISCOUNTS[selected.name] || 0;
+        const discount = selected.discount;
         
         // меняем текст над полем
         promoLabel.innerHTML = '<img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Symbols/Free%20Button.webp?raw=true" style="width:20px;vertical-align:middle;"> <b> Промокод успешно активирован!</b>';
