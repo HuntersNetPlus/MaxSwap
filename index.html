@@ -585,14 +585,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 900);
     }
 
-    const DISCOUNTS = {
-    "Max Swap Online Card": 22.5,
-    "Max Swap NFC Card": 22.5,
-    "Max Swap Ultima": 50
-};
-
-let selected = { name: null, price: 0, discount: 0 };
-
     function selectOption(name, price) {
         selected = { name, price };
         document.getElementById('pay_title').innerText = name;
@@ -757,6 +749,12 @@ document.querySelectorAll('.tooltip').forEach(t => {
 //------------------------------------------------------
 
 const VALID_PROMOS = ["VARLAMOV", "ВАРЛАМОВ", "КАЦ", "KATZ", "ФРОНТ", "СВОБОДА", "SWAP", "КАЦ"]; // твой список
+const DISCOUNTS = {
+    "Max Swap Online Card": 22.5,
+    "Max Swap NFC Card": 22.5,
+    "Max Swap Ultima": 50
+};
+    
 
 const promoInput = document.getElementById("promo_input");
     promoInput.addEventListener('input', () => {
@@ -767,7 +765,9 @@ const promoLabel = document.getElementById("promo_label");
 const confettiContainer = document.getElementById("confetti-container");
 
 
-      
+    // пример выбранной карты (должно быть то же, что у тебя в selected)
+let selected = { name: "Max Swap Online Card", price: 52.5 };
+   
 // обработка кнопки "Проверить"
 promoBtn.addEventListener("click", () => {
     const code = promoInput.value.trim().toUpperCase();
