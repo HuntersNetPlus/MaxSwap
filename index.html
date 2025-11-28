@@ -28,6 +28,7 @@ body {
 
 #promo_input::placeholder {
     color: #6ab2f2;
+    text-transform: uppercase;
     opacity: 1; /* чтобы цвет был полностью видимый */
 }
     
@@ -756,6 +757,9 @@ const DISCOUNTS = {
     
 
 const promoInput = document.getElementById("promo_input");
+    promoInput.addEventListener('input', () => {
+    promoInput.value = promoInput.value.toUpperCase();
+});
 const promoBtn = document.getElementById("promo_btn");
 const promoLabel = document.getElementById("promo_label");
 const confettiContainer = document.getElementById("confetti-container");
@@ -788,7 +792,7 @@ promoBtn.addEventListener("click", () => {
         showGlassToast(`
             <div style="text-align:center;">
                 <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Activity/Party%20Popper.webp?raw=true" style="width:70px;"><br>
-                <div><b>Промокод успешно принят!</b><br><br> После активации карты на баланс будет дополнительно зачислено ${discount} USDT! <br><br> <b>Промокод действует 24 часа!</b></div>
+                <div><b>Промокод ${code} успешно принят!</b><br><br> После активации карты на баланс будет дополнительно зачислено ${discount} USD! <br><br> <b>Этот промокод действует 24 часа!</b></div>
             </div>
         `);
 
