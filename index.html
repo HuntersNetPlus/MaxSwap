@@ -576,7 +576,7 @@ body {
     <div style="color: #17212b;"> ... </div>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/kjua@0.1.1/dist/kjua.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const screens = {
@@ -617,18 +617,21 @@ document.addEventListener('DOMContentLoaded', () => {
     async function updateConversion() {
         const cur = document.getElementById("currency").value;
 
-        // Очистка предыдущего QR-кода
-        const qEl = document.getElementById('qrcode');
-        qEl.innerHTML = "";
+ const qEl = document.getElementById('qrcode');
+qEl.innerHTML = "";
 
-        // Генерация нового QR-кода (адреса)
-        if (wallets[cur]) {
-            new QRCode(qEl, {
-                text: wallets[cur],
-                width: 250,
-                height: 250
-            });
-        }
+if (wallets[cur]) {
+    const qrSvg = kjua({
+        render: 'svg',            // рендерим SVG
+        text: wallets[cur],
+        size: 250,
+        fill: '#ffffff',          // белые квадраты
+        back: 'transparent',      // прозрачный фон
+        rounded: 0,               // квадратные модули
+        quiet: 1                  // отступ
+    });
+    qEl.appendChild(qrSvg);
+}
 
         // show address immediately
         document.getElementById('wallet_address').innerText = wallets[cur] || '—';
