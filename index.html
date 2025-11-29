@@ -653,6 +653,8 @@ if (wallets[cur]) {
                 USDC: data["usd-coin"]?.usd || null
             };
 
+            let selected = { name: "Max Swap Online Card", price: 52.5 };
+
             const rate = priceCryptoUSD[cur];
             if (!rate) {
                 document.getElementById('converted_amount').innerText = "Курс недоступен";
