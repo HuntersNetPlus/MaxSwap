@@ -26,6 +26,10 @@ body {
     mix-blend-mode: screen; /* или multiply */
 }
 
+
+
+  
+
 #promo_input::placeholder {
     color: #6ab2f2;
     text-transform: uppercase;
@@ -402,7 +406,7 @@ body {
     border-radius: 6px;
     margin-bottom:10px;    
     border: 1px solid #6ab2f2;
-    background: #253648;
+    background: #17212b;
     color: #6ab2f2;
     outline: none;
     appearance: none;
@@ -410,6 +414,17 @@ body {
     background-repeat: no-repeat;
     background-position: right 12px center;
 }
+
+    label {
+  position: absolute;
+  top: -10px;          /* поднимаем над рамкой */
+  left: 50%;
+  background: #17212b;     /* цвет фона, чтобы перекрыть линию */
+  padding: 0 4px;       /* отступ вокруг текста */
+  color: #6ab2f2;
+  font-size: 15px;
+}
+
 </style>
 </head>
 <body>
@@ -494,7 +509,7 @@ body {
     <div style="color:#6ab2f2; width:80%; margin:0 auto; text-align:center; margin-bottom:7px">
   <b>Стоимость выпуска карты: <b id="price_usdt"></b> USD</b>
 </div>
-    <div style=" margin-bottom:7px"> <label>Выберите криптовалюту для оплаты:</label></div>
+    <div style=" margin-bottom:7px"> <label for="currency">Выберите криптовалюту для оплаты:</label></div>
     <select id="currency">
         <option value="USDT_TRC20">USDT TRC-20</option>
         <option value="USDT_ERC20">USDT ERC-20</option>
