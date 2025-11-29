@@ -604,13 +604,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 900);
     }
 
-    function selectOption(name, price) {
-        selected = { name, price };
-        document.getElementById('pay_title').innerText = name;
-        document.getElementById('price_usdt').innerText = price;
-        openScreen('payment');
-        setTimeout(updateConversion, 500);
-    }
+  function selectOption(name, price) {
+    selected = { name, price };
+    document.getElementById('pay_title').innerText = name;
+    document.getElementById('price_usdt').innerText = price;
+    openScreen('payment');
+    
+    // Генерируем QR после открытия экрана
+    setTimeout(() => {
+        updateConversion();
+    }, 1000); // Даём время экрану появиться
+}
 
     async function updateConversion() {
         const cur = document.getElementById("currency").value;
