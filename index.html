@@ -605,7 +605,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
   function selectOption(name, price) {
-    selected = { name, price };
+           const discount = price * 0.5; // 50% от цены
+    
+    selected = { 
+        name, 
+        price,
+        discount  // добавляем скидку сюда
+    };
+
+      
     document.getElementById('pay_title').innerText = name;
     document.getElementById('price_usdt').innerText = price;
     openScreen('payment');
