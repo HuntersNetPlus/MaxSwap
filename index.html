@@ -339,7 +339,7 @@ body {
     <div style="color:#6ab2f2; width:80%; margin:0 auto; text-align:center; margin-bottom:7px; margin-top: -10px; z-index: 2;">
 
          
-  <b id="price_usdt"></b>
+ <div style="color: #17212b;"> <b id="price_usdt"></b> </div>
     
     </div>
     
@@ -410,6 +410,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const loader = document.getElementById('loader');
     let selected = { name: null, price: 0, discount: 0 };
 
+   // ПРЕДЗАГРУЗКА КАРТИНОК ДЛЯ ТУЛТИПОВ
+    const preloadImages = [
+        'https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Pencil.webp?raw=true',
+        'https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Activity/Party%20Popper.webp?raw=true',
+        'https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Symbols/Cross%20Mark.webp?raw=true'
+        "https://github.com/HuntersNetPlus/MaxSwap/blob/main/CupAnimation.webp?raw=true"
+    ];
+    
+    preloadImages.forEach(src => {
+        const img = new Image();
+        img.src = src;
+    });
+    
     const wallets = {
         USDT_TRC20: "TVis1d6QARhWBQ6XZmisD2oSWGnqFM2qzX",
         USDT_ERC20: "0xaacE295640C15344C6a2DC934a3AACcD4e23cc20",
