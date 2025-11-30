@@ -410,7 +410,17 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const loader = document.getElementById('loader');
     let selected = { name: null, price: 0, discount: 0 };
-
+    
+    // Предзагрузка картинок для тултипов
+    const preloadImages = [
+        'https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Pencil.webp?raw=true',
+        'https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Activity/Party%20Popper.webp?raw=true',
+        'https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Symbols/Cross%20Mark.webp?raw=true'
+    ];
+    preloadImages.forEach(src => {
+        const img = new Image();
+        img.src = src;
+    });
  
     
     const wallets = {
