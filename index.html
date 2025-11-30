@@ -84,7 +84,7 @@ body {
 }
 
 .glass-status-btn {
-    
+    padding: 2px;
     width: 65vw;
     max-width: 65vw;
     background: rgba(255, 255, 255, 0.12);
@@ -584,6 +584,14 @@ document.addEventListener('DOMContentLoaded', () => {
             `);
 
             launchConfetti();
+            
+             // Отключаем возможность повторного ввода
+    promoInput.disabled = true;
+    promoBtn.disabled = true;
+    promoInput.style.opacity = '0.5';
+    promoBtn.style.opacity = '0.5';
+}
+        
         } else {
             promoLabel.innerHTML = '<img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Activity/Ticket.webp?raw=true" style="width:20px; vertical-align:middle"> <b>Есть промокод? Введи его ниже!</b>';
             promoLabel.classList.remove("gold-glow");
