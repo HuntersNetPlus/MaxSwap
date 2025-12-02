@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Max Swap Карта</title>
-<style> 
+<style>  
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -21,6 +21,22 @@ body {
           color: #17212b;
           display: none;
     }
+
+
+
+    .sbp-link {
+    color: #17212b;       /* цвет текста */
+    font-size: 14px;      /* размер */
+    text-decoration: none; /* убрать подчёркивание */
+    background: #6ab2f2;
+    max-width: 75vw;
+    padding: 10px;
+    border-radius: 4px;
+    word-wrap: break-word;
+    text-align: center;
+    
+           
+}
     
 .active { display: block; }
 
@@ -85,11 +101,11 @@ body {
 
 .glass-status-btn {
     padding: 2px;
-    width: 65vw;
-    max-width: 65vw;
+    width: 63vw;
+    max-width: 63vw;
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 6px;
+    border-radius: 4px;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     position: relative;
@@ -245,13 +261,23 @@ body {
 }
 
 .address-box {
-    max-width: 70vw;
-    padding: 12px;
+    max-width: 65vw;
+    padding: 8px;
     border: 2px dashed #6ab2f2;
     border-radius: 4px;
     word-wrap: break-word;
     text-align: center;
-    font-size: 10px;
+    font-size: 12px;
+    cursor: pointer;
+}
+    .sbp-active {
+    max-width: 65vw;
+    padding: 8px;
+    border: 2px #6ab2f2;
+    border-radius: 4px;
+    word-wrap: break-word;
+    text-align: center;
+    font-size: 12px;
     cursor: pointer;
 }
 
@@ -353,6 +379,8 @@ body {
         <option value="BTC">BTC</option>
         <option value="ETH">ETH</option>
         <option value="LTC">LTC</option>
+        <option value="SBP">Перевод на карту</option>
+        <option value="SBP">СБП</option>
     </select>
     
     <div style="color:#6ab2f2; margin-bottom:7px"><b>Сумма в этой валюте:</b> <b id="converted_amount">...</b></div>
@@ -366,13 +394,13 @@ body {
                 <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Money%20With%20Wings.webp?raw=true" style="width:70px;">
                 <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Symbols/Currency%20Exchange.webp?raw=true" style="width:70px;">
                 <img src="https://github.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/blob/main/Objects/Identification%20Card.webp?raw=true" style="width:70px;"><br>
-                Карта будет активирована автоматически когда транзакция получит как минимум 4 подтверждения сети.
+                Карта будет активирована автоматически когда транзакция получит как минимум 4 подтверждения сети. <br> Последнее обновление статуса: <span id="time"></span> <br> ID заявки <span id="randomId"></span>. 
             </span>
         </span>
     </div>
     
     <div class="address-box" id="copy_address">
-        <b id="wallet_address">...</b>
+        <b id="wallet_address">...</b> 
     </div>
 
     <div class="qr-glow-wrapper">
@@ -386,7 +414,7 @@ body {
 
         <input id="promo_input" placeholder="...." style="width:25%; padding:10px; border-radius:4px; border:1px solid #6ab2f2; font-size:16px;background:#253648; color:#6ab2f2;">
         
-        <button id="promo_btn" style="padding:10px 20px; font-size:16px; border-radius:4px; background:#6ab2f2; border: none; color: white;">
+        <button id="promo_btn" style="padding:10px 20px; font-size:16px; border-radius:4px; background:#6ab2f2; border: none; color: #17212b;">
             <b>Применить</b>
         </button>
     </div>
@@ -426,17 +454,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const img = new Image();
         img.src = src;
     });
- 
+   
     
     const wallets = {
-        USDT_TRC20: "TVis1d6QARhWBQ6XZmisD2oSWGnqFM2qzX",
-        USDT_ERC20: "0xaacE295640C15344C6a2DC934a3AACcD4e23cc20",
+        USDT_TRC20: "TLZu5cha5JvmJiMAtdswudzfMJjxAwH6WH",
+        USDT_ERC20: "0xe1B6bEfAa7E23835b94950d38CfC160FBE876e52",
         USDT_SOL: "AVQJ4s1Y9BrtEmnH5WrxPT818YibUJsaR4uU6Aiht647",
-        BTC: "bc1qrhqsqsds47hycq0zkpx8fdvwfyu0hey843lz6j",
-        ETH: "0xaacE295640C15344C6a2DC934a3AACcD4e23cc20",
+        BTC: "bc1qvpzg2s44nnnpjqgqze2ppjtgdn6yltjlc2rjd4",
+        ETH: "0xe1B6bEfAa7E23835b94950d38CfC160FBE876e52",
         LTC: "LS2Pg4V8AhaQ1FRweGUHfkBxtwFAbJ6Dpy",
-        USDC: "0xaacE295640C15344C6a2DC934a3AACcD4e23cc20"
+        USDC: "0xe1B6bEfAa7E23835b94950d38CfC160FBE876e52",
+        SBP: 'https://t.me/MaxSwapSupport?text=Здравствуйте!%20Хочу%20выпустить%20моментальную%20карту.%20Нужны%20реквизиты%20для%20оплаты.'
     };
+
+ 
+      
 
     function openScreen(id) {
         Object.values(screens).forEach(s => s.classList.remove('active'));
@@ -465,55 +497,99 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 250);
     }
 
-    async function updateConversion() {
-        const cur = document.getElementById("currency").value;
+async function updateConversion() {
+    const cur = document.getElementById("currency").value;
 
-        const qEl = document.getElementById('qrcode');
-        qEl.innerHTML = "";
+    const qEl = document.getElementById('qrcode');
+    qEl.innerHTML = "";
 
-        if (wallets[cur]) {
-            const qrSvg = kjua({
-                render: 'svg',
-                text: wallets[cur],
-                size: 250,
-                fill: '#6ab2f2',
-                back: 'transparent',
-                rounded: 0,
-                quiet: 1
-            });
-            qEl.appendChild(qrSvg);
-        }
+    // Генерация QR
+    if (wallets[cur]) {
+        const qrSvg = kjua({
+            render: 'svg',
+            text: wallets[cur],
+            size: 250,
+            fill: '#6ab2f2',
+            back: 'transparent',
+            rounded: 0,
+            quiet: 1
+        });
+        qEl.appendChild(qrSvg);
+    }
 
-        document.getElementById('wallet_address').innerText = wallets[cur] || '—';
+    const walletBlock = document.getElementById('wallet_address');
+    const w = wallets[cur];
 
-        if (cur.startsWith("USDT")) {
-            document.getElementById('converted_amount').innerText = `${selected.price} USDT`;
+    // ✅ Если SBP — выводим анкорную ссылку
+    if (cur === "SBP" && w.startsWith("https://t.me/")) {
+        walletBlock.innerHTML = `<a href="${w}" class="sbp-link" target="_blank" rel="noopener">Перейдите по ссылке для оплаты</a>`;
+        
+    } else {
+        // Все остальные валюты — просто текст
+        walletBlock.innerText = w || "—";
+    }
+
+      // СМЕНА СТИЛЯ 
+    const adressBox = document.querySelector('.address-box');
+    if (cur === "SBP") {
+    adressBox.classList.add("sbp-active");
+} else {
+    adressBox.classList.remove("sbp-active");
+}
+
+    // --- Курс SBP ---
+    if (cur === "SBP") {
+        const usdtToRub = 95;
+        const amountRub = (selected.price * usdtToRub).toFixed(2);
+        document.getElementById('converted_amount').innerText = `${amountRub} RUB`;
+        return;
+    }
+
+    // --- USDT ---
+    if (cur.startsWith("USDT")) {
+        document.getElementById('converted_amount').innerText = `${selected.price} USDT`;
+        return;
+    }
+
+    // --- BTC / ETH / LTC / USDC ---
+    try {
+        const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,litecoin,usd-coin&vs_currencies=usd");
+        const data = await res.json();
+        const priceCryptoUSD = {
+            BTC: data.bitcoin?.usd || null,
+            ETH: data.ethereum?.usd || null,
+            LTC: data.litecoin?.usd || null,
+            USDC: data["usd-coin"]?.usd || null
+        };
+
+        const rate = priceCryptoUSD[cur];
+        if (!rate) {
+            document.getElementById('converted_amount').innerText = "Курс недоступен";
             return;
         }
 
-        try {
-            const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,litecoin,usd-coin&vs_currencies=usd");
-            const data = await res.json();
-            const priceCryptoUSD = {
-                BTC: data.bitcoin?.usd || null,
-                ETH: data.ethereum?.usd || null,
-                LTC: data.litecoin?.usd || null,
-                USDC: data["usd-coin"]?.usd || null
-            };
-
-            const rate = priceCryptoUSD[cur];
-            if (!rate) {
-                document.getElementById('converted_amount').innerText = "Курс недоступен";
-                return;
-            }
-
-            const converted = (selected.price / rate).toFixed(6);
-            document.getElementById('converted_amount').innerText = `${converted} ${cur}`;
-        } catch (e) {
-            console.warn(e);
-            document.getElementById('converted_amount').innerText = "Ошибка загрузки курса";
-        }
+        const converted = (selected.price / rate).toFixed(6);
+        document.getElementById('converted_amount').innerText = `${converted} ${cur}`;
+    } catch (e) {
+        console.warn(e);
+        document.getElementById('converted_amount').innerText = "Ошибка загрузки курса";
     }
+}
+
+
+
+     function generateRandomId(length = 10) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let id = '';
+    for (let i = 0; i < length; i++) {
+      id += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return id;
+  }
+
+  // Вставляем случайный ID в span
+  document.getElementById("randomId").textContent = generateRandomId();
+    
 
     // Кнопка открытия
     document.getElementById('welcomeBtn').addEventListener('click', () => openScreen('choose'));
@@ -530,6 +606,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('copy_address').addEventListener('click', function() {
         const text = document.getElementById('wallet_address').innerText;
         if (!text || text === '—') return;
+        
+        // Для СБП открываем ссылку вместо копирования
+        const cur = document.getElementById("currency").value;
+        if (cur === "SBP" && text.startsWith("https://t.me/")) {
+            window.open(text, '_blank');
+            this.classList.add("copied");
+            setTimeout(() => this.classList.remove("copied"), 2000);
+            return;
+        }
+        
         navigator.clipboard.writeText(text).then(() => {
             this.classList.add("copied");
             setTimeout(() => this.classList.remove("copied"), 2000);
@@ -537,14 +623,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Тултипы
-    document.querySelectorAll('.tooltip').forEach(t => {
-        t.addEventListener('click', function(e) {
-            this.classList.add('show');
-            setTimeout(() => {
-                this.classList.remove('show');
-            }, 9000);
+document.querySelectorAll('.tooltip').forEach(t => {
+    t.addEventListener('click', function(e) {
+        e.stopPropagation(); // не даём документу тут же закрыть
+
+        // Сначала закрываем все другие тултипы
+        document.querySelectorAll('.tooltip.show').forEach(open => {
+            if (open !== this) open.classList.remove('show');
         });
+
+        // Открываем текущий
+        this.classList.add('show');
     });
+});
+
+// Закрытие по клику вне
+document.addEventListener('click', () => {
+    document.querySelectorAll('.tooltip.show').forEach(t => {
+        t.classList.remove('show');
+    });
+});
 
     // ПРОМОКОД
     const VALID_PROMOS = ["VARLAMOV", "ВАРЛАМОВ", "КАЦ", "KATZ", "ФРОНТ", "СВОБОДА", "SWAP"];
@@ -632,6 +730,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+     document.getElementById("time").textContent = new Date().toTimeString().slice(0,8);
+
+    
+
     // Конфетти
     function launchConfetti() {
         confettiContainer.innerHTML = "";
@@ -662,6 +764,13 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => c.remove(), 5000);
         }
     }
+
+
+
+
+
+
+    
 
     // Слайдшоу
     const slides = document.querySelectorAll(".slide");
