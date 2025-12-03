@@ -29,7 +29,7 @@ body {
     font-size: 14px;      /* размер */
     text-decoration: none; /* убрать подчёркивание */
     background: #6ab2f2;
-    max-width: 75vw;
+    max-width: 70vw;
     padding: 10px;
     border-radius: 4px;
     word-wrap: break-word;
@@ -601,7 +601,7 @@ async function updateConversion() {
 
     // Смена валюты
     document.getElementById('currency').addEventListener('change', updateConversion);
-
+                          
     // Копирование адреса
     document.getElementById('copy_address').addEventListener('click', function() {
         const text = document.getElementById('wallet_address').innerText;
